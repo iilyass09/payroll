@@ -1,15 +1,18 @@
+@push('topbar-left')
+    <div>
+        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Detail Histori Payroll</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Periode {{ $import->periode }}</p>
+    </div>
+@endpush
+@push('topbar-right')
+    <a href="{{ route('history.index') }}" class="btn-ghost">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
+        Kembali
+    </a>
+@endpush
+
 <x-app-layout title="Detail Histori">
 
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Detail Histori Payroll</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Periode {{ $import->periode }}</p>
-        </div>
-        <a href="{{ route('history.index') }}" class="btn-ghost">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
-            Kembali
-        </a>
-    </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <div class="stat-card">

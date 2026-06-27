@@ -1,9 +1,12 @@
+@push('topbar-left')
+    <div>
+        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Pengaturan Akun</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Kelola informasi profil dan keamanan akun Anda</p>
+    </div>
+@endpush
+
 <x-app-layout title="Pengaturan">
 
-    <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Pengaturan Akun</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Kelola informasi profil dan keamanan akun Anda</p>
-    </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">

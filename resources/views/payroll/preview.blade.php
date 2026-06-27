@@ -1,9 +1,12 @@
+@push('topbar-left')
+    <div>
+        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Preview Data Payroll</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Periksa data sebelum melanjutkan ke generate slip gaji</p>
+    </div>
+@endpush
+
 <x-app-layout title="Preview Payroll">
 
-    <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Preview Data Payroll</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Periksa data sebelum melanjutkan ke generate slip gaji</p>
-    </div>
 
     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
         <div class="flex items-center w-full overflow-x-auto pb-1">

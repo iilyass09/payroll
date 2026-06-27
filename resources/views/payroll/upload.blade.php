@@ -1,9 +1,12 @@
+@push('topbar-left')
+    <div>
+        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Upload Payroll</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Upload file Excel berisi data payroll karyawan</p>
+    </div>
+@endpush
+
 <x-app-layout title="Upload Payroll">
 
-    <div>
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Upload Payroll</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Upload file Excel berisi data payroll karyawan</p>
-    </div>
 
     <div class="card p-6">
         <form action="{{ route('payroll.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">

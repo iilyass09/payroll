@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Division;
 use App\Models\EmailLog;
+use App\Models\Employee;
 use App\Models\PayrollDetail;
 use App\Models\PayrollImport;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,8 @@ class DashboardService
         return [
             'total_payroll' => PayrollImport::sum('total_payroll'),
             'total_employee' => PayrollImport::sum('total_employee'),
+            'total_employees' => Employee::count(),
+            'total_divisions' => Division::count(),
             'email_sent' => EmailLog::where('status', 'sent')->count(),
             'email_failed' => EmailLog::where('status', 'failed')->count(),
         ];
