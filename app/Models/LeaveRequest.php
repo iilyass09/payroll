@@ -15,6 +15,7 @@ class LeaveRequest extends Model
         'tanggal_selesai',
         'durasi',
         'keterangan',
+        'catatan_persetujuan',
         'persetujuan_koor',
         'persetujuan_hr',
     ];

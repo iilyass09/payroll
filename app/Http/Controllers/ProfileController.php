@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PinUpdateRequest;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,6 +35,32 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function pin(Request $request): View
+    {
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    public function updatePin(PinUpdateRequest $request): RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($user->hasPin()) {
+            if (!password_verify($request->current_pin, $user->pin_hash)) {
+                return back()->withErrors(['current_pin' => 'PIN saat ini tidak sesuai.'])->withInput();
+            }
+        }
+
+        $isNew = !$user->hasPin();
+        $user->pin_hash = bcrypt($request->pin);
+        $user->save();
+
+        $message = $isNew ? 'PIN Persetujuan berhasil dibuat.' : 'PIN Persetujuan berhasil diperbarui.';
+
+        return Redirect::route('profile.edit')->with('pin_success', $message);
     }
 
 }

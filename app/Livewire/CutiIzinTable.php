@@ -23,6 +23,21 @@ class CutiIzinTable extends Component
     public string $pengajuanTanggalSelesai = '';
     public string $pengajuanKeterangan = '';
 
+    public bool $showPinModal = false;
+    public bool $showNoPinModal = false;
+    public bool $showApprovalSuccessModal = false;
+    public string $approvalSuccessMessage = '';
+    public bool $showDeleteConfirmModal = false;
+    public bool $showDeleteSuccessModal = false;
+    public ?int $deleteId = null;
+    public string $deleteSuccessMessage = '';
+    public bool $showSubmitSuccessModal = false;
+    public string $pin = '';
+    public string $catatan = '';
+    public ?int $pendingId = null;
+    public string $pendingLevel = '';
+    public string $pendingAction = '';
+
     public function updatingSearch(): void
     {
         $this->resetPage();
@@ -80,13 +95,29 @@ class CutiIzinTable extends Component
         ]);
 
         $this->closePengajuanModal();
-        $this->dispatch('notify', type: 'success', message: 'Pengajuan berhasil dikirim.');
+        $this->showSubmitSuccessModal = true;
     }
 
     public function setujui(int $id, string $level): void
     {
         $lr = LeaveRequest::with('employee')->findOrFail($id);
         $this->authorizeApproval($lr, $level);
+
+        $user = auth()->user();
+        if ($user->requiresPinApproval()) {
+            if (!$user->hasPin()) {
+                $this->showNoPinModal = true;
+                return;
+            }
+            $this->pendingId = $id;
+            $this->pendingLevel = $level;
+            $this->pendingAction = 'setujui';
+            $this->pin = '';
+            $this->catatan = '';
+            $this->showPinModal = true;
+            return;
+        }
+
         $lr->update([$level => 'disetujui']);
         $this->dispatch('notify', type: 'success', message: 'Pengajuan disetujui.');
     }
@@ -95,8 +126,63 @@ class CutiIzinTable extends Component
     {
         $lr = LeaveRequest::with('employee')->findOrFail($id);
         $this->authorizeApproval($lr, $level);
+
+        $user = auth()->user();
+        if ($user->requiresPinApproval()) {
+            if (!$user->hasPin()) {
+                $this->showNoPinModal = true;
+                return;
+            }
+            $this->pendingId = $id;
+            $this->pendingLevel = $level;
+            $this->pendingAction = 'tolak';
+            $this->pin = '';
+            $this->catatan = '';
+            $this->showPinModal = true;
+            return;
+        }
+
         $lr->update([$level => 'ditolak']);
         $this->dispatch('notify', type: 'success', message: 'Pengajuan ditolak.');
+    }
+
+    public function cancelPinModal(): void
+    {
+        $this->showPinModal = false;
+        $this->reset(['pin', 'catatan', 'pendingId', 'pendingLevel', 'pendingAction']);
+    }
+
+    public function submitPinApproval(): void
+    {
+        $this->validate([
+            'pin' => ['required', 'string', 'size:6'],
+        ]);
+
+        $user = auth()->user();
+        if (!$user->verifyPin($this->pin)) {
+            $this->addError('pin', 'PIN Persetujuan yang Anda masukkan tidak sesuai.');
+            return;
+        }
+
+        $lr = LeaveRequest::findOrFail($this->pendingId);
+        $this->authorizeApproval($lr, $this->pendingLevel);
+
+        $status = $this->pendingAction === 'setujui' ? 'disetujui' : 'ditolak';
+        $updateData = [$this->pendingLevel => $status];
+
+        if ($this->catatan) {
+            $updateData['catatan_persetujuan'] = $this->catatan;
+        }
+
+        $lr->update($updateData);
+
+        $message = 'Pengajuan ' . ($this->pendingAction === 'setujui' ? 'disetujui' : 'ditolak') . '.';
+
+        $this->showPinModal = false;
+        $this->reset(['pin', 'catatan', 'pendingId', 'pendingLevel', 'pendingAction']);
+
+        $this->approvalSuccessMessage = $message;
+        $this->showApprovalSuccessModal = true;
     }
 
     private function authorizeApproval(LeaveRequest $lr, string $level): void
@@ -117,37 +203,64 @@ class CutiIzinTable extends Component
         }
     }
 
-    public function hapus(int $id): void
+    public function confirmDelete(int $id): void
     {
         $user = auth()->user();
-        $employee = $user->employee;
 
-        if (!$employee) {
-            $this->dispatch('notify', type: 'error', message: 'Akun Anda tidak terhubung ke data karyawan.');
-            return;
+        if ($user->isKaryawan()) {
+            $employee = $user->employee;
+            if (!$employee) {
+                $this->dispatch('notify', type: 'error', message: 'Akun Anda tidak terhubung ke data karyawan.');
+                return;
+            }
+            $lr = LeaveRequest::where('id', $id)->where('employee_id', $employee->id)->first();
+            if (!$lr) {
+                $this->dispatch('notify', type: 'error', message: 'Data tidak ditemukan.');
+                return;
+            }
+            if ($lr->persetujuan_koor !== 'menunggu' && $lr->persetujuan_hr !== 'menunggu') {
+                $this->dispatch('notify', type: 'error', message: 'Hanya pengajuan yang masih menunggu yang dapat dihapus.');
+                return;
+            }
+        } else {
+            Gate::authorize('delete-data');
         }
 
-        $lr = LeaveRequest::where('id', $id)->where('employee_id', $employee->id)->first();
+        $this->deleteId = $id;
+        $this->showDeleteConfirmModal = true;
+    }
 
-        if (!$lr) {
-            $this->dispatch('notify', type: 'error', message: 'Data tidak ditemukan.');
-            return;
-        }
+    public function executeDelete(): void
+    {
+        if (!$this->deleteId) return;
 
-        if ($lr->persetujuan_koor !== 'menunggu' && $lr->persetujuan_hr !== 'menunggu') {
-            $this->dispatch('notify', type: 'error', message: 'Hanya pengajuan yang masih menunggu yang dapat dihapus.');
-            return;
+        $user = auth()->user();
+        $lr = LeaveRequest::findOrFail($this->deleteId);
+
+        if ($user->isKaryawan()) {
+            $employee = $user->employee;
+            if (!$employee || $lr->employee_id !== $employee->id) {
+                abort(403);
+            }
+            if ($lr->persetujuan_koor !== 'menunggu' && $lr->persetujuan_hr !== 'menunggu') {
+                abort(403);
+            }
+        } else {
+            Gate::authorize('delete-data');
         }
 
         $lr->delete();
-        $this->dispatch('notify', type: 'success', message: 'Pengajuan berhasil dihapus.');
+
+        $this->showDeleteConfirmModal = false;
+        $this->deleteSuccessMessage = 'Pengajuan berhasil dihapus.';
+        $this->showDeleteSuccessModal = true;
+        $this->deleteId = null;
     }
 
-    public function hapusAdmin(int $id): void
+    public function cancelDelete(): void
     {
-        Gate::authorize('delete-data');
-        LeaveRequest::findOrFail($id)->delete();
-        $this->dispatch('notify', type: 'success', message: 'Pengajuan berhasil dihapus.');
+        $this->showDeleteConfirmModal = false;
+        $this->deleteId = null;
     }
 
     public function render()
@@ -205,6 +318,12 @@ class CutiIzinTable extends Component
                 ->where('employee_id', $employee->id)
                 ->when($this->filterJenis, function ($query) {
                     $query->where('jenis', $this->filterJenis);
+                })
+                ->when($this->filterStatus, function ($query) {
+                    $query->where(function ($q) {
+                        $q->where('persetujuan_koor', $this->filterStatus)
+                          ->orWhere('persetujuan_hr', $this->filterStatus);
+                    });
                 })
                 ->latest()
                 ->paginate(10);

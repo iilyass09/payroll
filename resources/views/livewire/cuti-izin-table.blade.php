@@ -68,7 +68,19 @@
                 </button>
             </div>
 
-            <div class="overflow-x-auto">
+            <div class="flex items-center gap-3 px-6 py-3 border-b border-gray-50 dark:border-gray-800">
+                <select wire:model.live="filterJenis" class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 pr-8 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all duration-200">
+                    <option value="">Semua Jenis</option>
+                    <option value="cuti_tahunan">Cuti Tahunan</option>
+                    <option value="izin">Izin</option>
+                </select>
+                <select wire:model.live="filterStatus" class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 pr-8 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all duration-200">
+                    <option value="">Semua Status</option>
+                    <option value="menunggu">Menunggu</option>
+                    <option value="disetujui">Disetujui</option>
+                    <option value="ditolak">Ditolak</option>
+                </select>
+            </div><div class="overflow-x-auto">
                 <table class="w-full text-sm">
                     <thead>
                         <tr class="table-header">
@@ -116,8 +128,7 @@
                                 </td>
                                 <td class="table-cell">
                                     @if($lr->persetujuan_koor === 'menunggu' || $lr->persetujuan_hr === 'menunggu')
-                                    <button wire:click="hapus({{ $lr->id }})"
-                                            wire:confirm="Yakin ingin menghapus pengajuan ini?"
+                                    <button wire:click="confirmDelete({{ $lr->id }})"
                                             class="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                                             title="Hapus">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
@@ -152,7 +163,13 @@
         {{-- PENGAJUAN MODAL --}}
         <div x-data="{ open: $wire.entangle('showPengajuanModal') }"
              x-show="open" x-cloak
-             class="fixed inset-0 z-50 flex items-start justify-center p-4 pt-10 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 scale-100"
+             x-transition:leave-end="opacity-0 scale-95"
              @click="open = false">
             <div @click.stop class="relative w-full max-w-lg rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl my-10">
                 <div class="flex items-center justify-between mb-6">
@@ -271,16 +288,23 @@
         </div>
 
         <div class="card">
+            {{-- Header --}}
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-4 border-b border-gray-50 dark:border-gray-800">
+                <div>
+                    <h2 class="text-base font-semibold text-gray-900 dark:text-gray-100">Pengajuan Cuti & Izin</h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Daftar pengajuan cuti dan izin karyawan</p>
+                </div>
+                @php $myEmployee = auth()->user()->employee; @endphp
+                @if($myEmployee)
+                <button wire:click="openPengajuanModal" class="btn-primary text-xs py-2 shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                    Ajukan Cuti / Izin
+                </button>
+                @endif
+            </div>
             {{-- Filter bar --}}
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-4 border-b border-gray-50 dark:border-gray-800">
                 <div class="flex items-center gap-3 flex-1 flex-wrap">
-                    @php $myEmployee = auth()->user()->employee; @endphp
-                    @if($myEmployee)
-                    <button wire:click="openPengajuanModal" class="btn-primary text-xs py-2 shrink-0">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-                        Ajukan Cuti / Izin
-                    </button>
-                    @endif
                     <div class="relative flex-1 min-w-[200px] max-w-xs">
                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
                         <input
@@ -291,18 +315,18 @@
                         >
                     </div>
 
-                    <select wire:model.live="filterJenis" class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all duration-200">
-                        <option value="">Semua Jenis</option>
-                        <option value="cuti_tahunan">Cuti Tahunan</option>
-                        <option value="izin">Izin</option>
-                    </select>
+                    <select wire:model.live="filterJenis" class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 pr-8 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all duration-200">
+                            <option value="">Semua Jenis</option>
+                            <option value="cuti_tahunan">Cuti Tahunan</option>
+                            <option value="izin">Izin</option>
+                        </select>
 
-                    <select wire:model.live="filterStatus" class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all duration-200">
-                        <option value="">Semua Status</option>
-                        <option value="menunggu">Menunggu</option>
-                        <option value="disetujui">Disetujui</option>
-                        <option value="ditolak">Ditolak</option>
-                    </select>
+                    <select wire:model.live="filterStatus" class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 pr-8 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all duration-200">
+                            <option value="">Semua Status</option>
+                            <option value="menunggu">Menunggu</option>
+                            <option value="disetujui">Disetujui</option>
+                            <option value="ditolak">Ditolak</option>
+                        </select>
                 </div>
             </div>
 
@@ -329,6 +353,7 @@
                                 $isAtasan = $userEmployee && $userEmployee->id === $lr->atasan_id;
                                 $canApproveKoor = $isAtasan;
                                 $canApproveHr = $user->id === 4 || $isHr;
+                                $requiresPin = $user->requiresPinApproval();
                             @endphp
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-900 transition-colors">
                                 <td class="table-cell text-center text-gray-500 dark:text-gray-400">{{ $leaveRequests->firstItem() + $loop->index }}</td>
@@ -362,12 +387,21 @@
                                         <div class="flex items-center gap-1">
                                             <span class="badge-warning">Menunggu</span>
                                             @if($canApproveKoor)
-                                            <button @click="confirmAction = true; confirmTitle = 'Setujui Pengajuan'; confirmMessage = 'Apakah Anda yakin ingin menyetujui pengajuan ini?'; confirmHandler = () => $wire.setujui({{ $lr->id }}, 'persetujuan_koor')" class="p-1 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-md transition-colors" title="Setujui">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                            </button>
-                                            <button @click="confirmAction = true; confirmTitle = 'Tolak Pengajuan'; confirmMessage = 'Apakah Anda yakin ingin menolak pengajuan ini?'; confirmHandler = () => $wire.tolak({{ $lr->id }}, 'persetujuan_koor')" class="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors" title="Tolak">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                            </button>
+                                                @if($requiresPin)
+                                                <button wire:click="setujui({{ $lr->id }}, 'persetujuan_koor')" class="p-1 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-md transition-colors" title="Setujui">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                </button>
+                                                <button wire:click="tolak({{ $lr->id }}, 'persetujuan_koor')" class="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors" title="Tolak">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                </button>
+                                                @else
+                                                <button @click="confirmAction = true; confirmTitle = 'Setujui Pengajuan'; confirmMessage = 'Apakah Anda yakin ingin menyetujui pengajuan ini?'; confirmHandler = () => $wire.setujui({{ $lr->id }}, 'persetujuan_koor')" class="p-1 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-md transition-colors" title="Setujui">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                </button>
+                                                <button @click="confirmAction = true; confirmTitle = 'Tolak Pengajuan'; confirmMessage = 'Apakah Anda yakin ingin menolak pengajuan ini?'; confirmHandler = () => $wire.tolak({{ $lr->id }}, 'persetujuan_koor')" class="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors" title="Tolak">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                </button>
+                                                @endif
                                             @endif
                                         </div>
                                     @endif
@@ -381,20 +415,28 @@
                                         <div class="flex items-center gap-1">
                                             <span class="badge-warning">Menunggu</span>
                                             @if($canApproveHr)
-                                            <button @click="confirmAction = true; confirmTitle = 'Setujui Pengajuan'; confirmMessage = 'Apakah Anda yakin ingin menyetujui pengajuan ini?'; confirmHandler = () => $wire.setujui({{ $lr->id }}, 'persetujuan_hr')" class="p-1 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-md transition-colors" title="Setujui">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                            </button>
-                                            <button @click="confirmAction = true; confirmTitle = 'Tolak Pengajuan'; confirmMessage = 'Apakah Anda yakin ingin menolak pengajuan ini?'; confirmHandler = () => $wire.tolak({{ $lr->id }}, 'persetujuan_hr')" class="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors" title="Tolak">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                                            </button>
+                                                @if($requiresPin)
+                                                <button wire:click="setujui({{ $lr->id }}, 'persetujuan_hr')" class="p-1 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-md transition-colors" title="Setujui">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                </button>
+                                                <button wire:click="tolak({{ $lr->id }}, 'persetujuan_hr')" class="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors" title="Tolak">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                </button>
+                                                @else
+                                                <button @click="confirmAction = true; confirmTitle = 'Setujui Pengajuan'; confirmMessage = 'Apakah Anda yakin ingin menyetujui pengajuan ini?'; confirmHandler = () => $wire.setujui({{ $lr->id }}, 'persetujuan_hr')" class="p-1 text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-md transition-colors" title="Setujui">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                </button>
+                                                <button @click="confirmAction = true; confirmTitle = 'Tolak Pengajuan'; confirmMessage = 'Apakah Anda yakin ingin menolak pengajuan ini?'; confirmHandler = () => $wire.tolak({{ $lr->id }}, 'persetujuan_hr')" class="p-1 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors" title="Tolak">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                </button>
+                                                @endif
                                             @endif
                                         </div>
                                     @endif
                                 </td>
                                 <td class="table-cell">
                                     @can('delete-data')
-                                    <button wire:click="hapusAdmin({{ $lr->id }})"
-                                            wire:confirm="Yakin ingin menghapus pengajuan ini?"
+                                    <button wire:click="confirmDelete({{ $lr->id }})"
                                             class="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                                             title="Hapus">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
@@ -441,7 +483,13 @@
 
     {{-- Confirmation Modal --}}
     <div x-show="confirmAction" x-cloak
-         class="fixed inset-0 z-50 flex items-start justify-center p-4 pt-10 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
          @click="confirmAction = false">
         <div @click.stop class="relative w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl my-10">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2" x-text="confirmTitle"></h3>
@@ -449,6 +497,177 @@
             <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <button @click="confirmAction = false" class="btn-secondary text-xs px-6">Batal</button>
                 <button @click="confirmHandler(); confirmAction = false" class="btn-primary text-xs px-6">Ya, Lanjutkan</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- PIN Persetujuan Modal --}}
+    <div x-data="{ open: $wire.entangle('showPinModal') }"
+         x-show="open" x-cloak
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         @click="open = false; $wire.cancelPinModal()">
+        <div @click.stop class="relative w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl my-10">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Konfirmasi PIN Persetujuan</h3>
+                <button @click="open = false; $wire.cancelPinModal()" class="rounded-xl p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-5">Masukkan PIN Persetujuan Anda untuk melanjutkan</p>
+
+            @error('pin')
+                <div class="mb-4 rounded-xl border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800 px-4 py-3">
+                    <p class="text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                </div>
+            @enderror
+
+            <div class="space-y-4">
+                <div>
+                    <x-input-label for="pin-input" value="PIN Persetujuan" />
+                    <x-text-input id="pin-input" wire:model="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" class="mt-1 block w-full text-center text-lg tracking-widest" placeholder="******" autocomplete="off" />
+                </div>
+
+                <div>
+                    <x-input-label for="catatan-input" value="Catatan (opsional)" />
+                    <textarea id="catatan-input" wire:model="catatan" rows="2" class="mt-1 block w-full rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition-all duration-200" placeholder="Tambahkan catatan..."></textarea>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-5 mt-5 border-t border-gray-100 dark:border-gray-700">
+                <button @click="open = false; $wire.cancelPinModal()" class="btn-secondary text-xs px-6">Batal</button>
+                <button wire:click="submitPinApproval" class="btn-primary text-xs px-6">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                    Konfirmasi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- No PIN Modal --}}
+    <div x-data="{ open: $wire.entangle('showNoPinModal') }"
+         x-show="open" x-cloak
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         @click="open = false">
+        <div @click.stop class="relative w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl my-10">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 dark:bg-amber-900/30 mx-auto mb-4">
+                <svg class="w-7 h-7 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center mb-2">PIN Persetujuan Belum Dibuat</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">Anda harus membuat PIN Persetujuan terlebih dahulu sebelum dapat menyetujui atau menolak pengajuan.</p>
+            <div class="flex items-center justify-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <button @click="open = false" class="btn-secondary text-xs px-6">Nanti Saja</button>
+                <a href="{{ route('profile.edit') }}" class="btn-primary text-xs px-6 inline-flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+                    Buat PIN Persetujuan
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {{-- Approval Success Modal --}}
+    <div x-data="{ open: $wire.entangle('showApprovalSuccessModal') }"
+         x-show="open" x-cloak
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         @click="open = false">
+        <div @click.stop class="relative w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl my-10">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 mx-auto mb-4">
+                <svg class="w-7 h-7 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center mb-2" x-text="$wire.approvalSuccessMessage"></h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">Status pengajuan telah berhasil diperbarui.</p>
+            <div class="flex items-center justify-center pt-4 border-t border-gray-100 dark:border-gray-700">
+                <button @click="open = false" class="btn-primary text-xs px-8">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Delete Confirm Modal --}}
+    <div x-data="{ open: $wire.entangle('showDeleteConfirmModal') }"
+         x-show="open" x-cloak
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         @click="open = false; $wire.cancelDelete()">
+        <div @click.stop class="relative w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl my-10">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-100 dark:bg-red-900/30 mx-auto mb-4">
+                <svg class="w-7 h-7 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center mb-2">Hapus Pengajuan</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">Apakah Anda yakin ingin menghapus pengajuan ini? Tindakan ini tidak dapat dibatalkan.</p>
+            <div class="flex items-center justify-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+                <button @click="open = false; $wire.cancelDelete()" class="btn-secondary text-xs px-6">Batal</button>
+                <button wire:click="executeDelete" class="btn-danger text-xs px-6 inline-flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>
+                    Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Delete Success Modal --}}
+    <div x-data="{ open: $wire.entangle('showDeleteSuccessModal') }"
+         x-show="open" x-cloak
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         @click="open = false">
+        <div @click.stop class="relative w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl my-10">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 mx-auto mb-4">
+                <svg class="w-7 h-7 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center mb-2" x-text="$wire.deleteSuccessMessage"></h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">Pengajuan telah berhasil dihapus dari sistem.</p>
+            <div class="flex items-center justify-center pt-4 border-t border-gray-100 dark:border-gray-700">
+                <button @click="open = false" class="btn-primary text-xs px-8">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    {{-- Submit Success Modal --}}
+    <div x-data="{ open: $wire.entangle('showSubmitSuccessModal') }"
+         x-show="open" x-cloak
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm overflow-y-auto"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-150"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-95"
+         @click="open = false">
+        <div @click.stop class="relative w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl my-10">
+            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 dark:bg-emerald-900/30 mx-auto mb-4">
+                <svg class="w-7 h-7 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center mb-2">Pengajuan Berhasil Dikirim</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">Pengajuan cuti/izin Anda telah berhasil dikirim dan menunggu persetujuan atasan.</p>
+            <div class="flex items-center justify-center pt-4 border-t border-gray-100 dark:border-gray-700">
+                <button @click="open = false" class="btn-primary text-xs px-8">Tutup</button>
             </div>
         </div>
     </div>

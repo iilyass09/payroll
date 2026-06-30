@@ -12,8 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'username', 'email', 'password', 'role'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable(['name', 'username', 'email', 'password', 'role', 'pin_hash'])]
+#[Hidden(['password', 'remember_token', 'pin_hash'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -22,6 +22,36 @@ class User extends Authenticatable
     public function employee(): HasOne
     {
         return $this->hasOne(Employee::class);
+    }
+
+    public function hasPin(): bool
+    {
+        return !is_null($this->pin_hash);
+    }
+
+    public function verifyPin(string $pin): bool
+    {
+        if (!$this->hasPin()) return false;
+        return password_verify($pin, $this->pin_hash);
+    }
+
+    public function setPin(string $pin): void
+    {
+        $this->pin_hash = bcrypt($pin);
+        $this->save();
+    }
+
+    public function requiresPinApproval(): bool
+    {
+        if ($this->id === 4) return true;
+
+        $emp = $this->employee;
+        if (!$emp) return false;
+
+        return in_array($emp->position, [
+            'Head of Store 1',
+            'Head of Store 2',
+        ]);
     }
 
     public function meetings(): HasMany
@@ -79,6 +109,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'pin_hash' => 'hashed',
         ];
     }
 }

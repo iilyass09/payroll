@@ -40,8 +40,8 @@
                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
             >
                 <div class="flex h-16 items-center gap-3 px-6 border-b border-gray-50 dark:border-gray-800">
-                    <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white font-bold text-sm shadow-lg shadow-blue-200">
-                        J
+                    <div class="flex items-center justify-center">
+                        <img src="{{ asset('logo.png') }}" alt="Johen Sukses Abadi" class="h-7 w-auto">
                     </div>
                     <div>
                         <span class="text-sm font-bold text-gray-900 dark:text-gray-100">Johen Sukses Abadi</span>
