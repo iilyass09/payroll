@@ -25,7 +25,7 @@ class PdfGenerationService
 
         if ($password) {
             $canvas = $dompdf->getCanvas();
-            $canvas->get_cpdf()->setEncryption($password, $password, ['print', 'copy']);
+            $canvas->get_cpdf()->setEncryption($password, $password, []);
         }
 
         $fullPath = Storage::disk('public')->path($path);

@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +22,16 @@ class User extends Authenticatable
     public function employee(): HasOne
     {
         return $this->hasOne(Employee::class);
+    }
+
+    public function meetings(): HasMany
+    {
+        return $this->hasMany(Meeting::class, 'created_by');
+    }
+
+    public function approvedRequests(): HasMany
+    {
+        return $this->hasMany(MeetingRequest::class, 'approved_by');
     }
 
     public function isAdmin(): bool
@@ -40,17 +51,17 @@ class User extends Authenticatable
 
     public function canCreateData(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'direksi']);
     }
 
     public function canUpdateData(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'direksi']);
     }
 
     public function canDeleteData(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'direksi']);
     }
 
     public function canViewAll(): bool

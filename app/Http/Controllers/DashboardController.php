@@ -41,8 +41,8 @@ class DashboardController extends Controller
         $payrolls = $this->dashboardService->getPayrollsByYear($selectedYear);
         $divisionStats = $this->dashboardService->getDivisionStats();
         $latestPayroll = $this->dashboardService->getLatestPayroll();
-        $pendingLeaveRequests = $this->dashboardService->getPendingLeaveRequests();
-        $pendingLeaveCount = $this->dashboardService->getPendingLeaveCount();
+        $pendingLeaveRequests = $this->dashboardService->getPendingLeaveRequests(user: $user);
+        $pendingLeaveCount = $this->dashboardService->getPendingLeaveCount(user: $user);
         $expiringContracts = $this->dashboardService->getExpiringContracts();
         $expiringContractCount = count($expiringContracts);
         $meetingStats = $this->dashboardService->getMonthlyMeetingStats();

@@ -22,11 +22,16 @@
         <div class="lg:col-span-1">
             <div class="card p-6">
                 <div class="text-center mb-6">
-                    <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-violet-500 text-white font-bold text-2xl mx-auto shadow-lg shadow-primary-200">
-                        {{ substr(Auth::user()->name, 0, 1) }}
+                    <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-violet-500 text-white font-bold text-2xl mx-auto shadow-lg shadow-primary-200 overflow-hidden">
+                        @php $foto = Auth::user()->employee?->foto; @endphp
+                        @if($foto)
+                            <img src="{{ asset('storage/employees/' . $foto) }}" alt="{{ Auth::user()->name }}" class="w-full h-full object-cover">
+                        @else
+                            {{ substr(Auth::user()->name, 0, 1) }}
+                        @endif
                     </div>
                     <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mt-4">{{ Auth::user()->name }}</h2>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ Auth::user()->employee?->position ?? Auth::user()->email }}</p>
                     <span class="badge-success mt-2 inline-flex">Akun Aktif</span>
                 </div>
             </div>

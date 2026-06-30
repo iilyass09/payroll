@@ -13,9 +13,13 @@
     {{-- Karyawan Profile Header --}}
     <div class="card p-6">
         <div class="flex items-center gap-4">
-            <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-xl shadow-lg shrink-0">
-                {{ strtoupper(substr($employee->nama, 0, 1)) }}
-            </div>
+            @if($employee->foto)
+                <img src="{{ asset('storage/employees/' . $employee->foto) }}" alt="{{ $employee->nama }}" class="h-14 w-14 rounded-2xl object-contain bg-gray-50 shadow-lg shrink-0">
+            @else
+                <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-white font-bold text-xl shadow-lg shrink-0">
+                    {{ strtoupper(substr($employee->nama, 0, 1)) }}
+                </div>
+            @endif
             <div>
                 <h2 class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ $employee->nama }}</h2>
                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ $employee->position ?? '-' }} • {{ $employee->nik }}</p>

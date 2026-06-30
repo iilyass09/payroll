@@ -8,6 +8,7 @@ use App\Models\EmailLog;
 use App\Models\Employee;
 use App\Models\EmployeeContract;
 use App\Models\LeaveRequest;
+use App\Models\Meeting;
 use App\Models\PayrollDetail;
 use App\Models\PayrollImport;
 use Illuminate\Support\Facades\DB;
@@ -61,17 +62,18 @@ class DashboardService
         return PayrollImport::latest()->first();
     }
 
-    public function getPendingLeaveCount(): int
+    public function getPendingLeaveCount($user = null): int
     {
-        return LeaveRequest::where(function ($q) {
-            $q->where('persetujuan_koor', 'menunggu')
-              ->orWhere('persetujuan_hr', 'menunggu');
-        })->count();
+        return $this->applyAtasanFilter(LeaveRequest::query(), $user)
+            ->where(function ($q) {
+                $q->where('persetujuan_koor', 'menunggu')
+                  ->orWhere('persetujuan_hr', 'menunggu');
+            })->count();
     }
 
-    public function getPendingLeaveRequests(int $limit = 5): array
+    public function getPendingLeaveRequests(int $limit = 5, $user = null): array
     {
-        return LeaveRequest::with('employee')
+        return $this->applyAtasanFilter(LeaveRequest::with('employee'), $user)
             ->where(function ($q) {
                 $q->where('persetujuan_koor', 'menunggu')
                   ->orWhere('persetujuan_hr', 'menunggu');
@@ -87,6 +89,24 @@ class DashboardService
                 'durasi' => $lr->durasi,
             ])
             ->toArray();
+    }
+
+    private function applyAtasanFilter($query, $user)
+    {
+        if (!$user) return $query;
+
+        $userEmployee = $user->employee;
+        if (!$userEmployee) return $query;
+
+        $lihatSemua = $user->id === 4 || $user->isDireksi() || in_array($userEmployee->position, [
+            'Human Resource Generalist', 'Admin HR', 'Admin GA', 'OB'
+        ]);
+
+        if (!$lihatSemua) {
+            $query->where('atasan_id', $userEmployee->id);
+        }
+
+        return $query;
     }
 
     public function getEmployeeStatusBreakdown(): array
@@ -111,9 +131,12 @@ class DashboardService
     public function getMonthlyMeetingStats(): array
     {
         $divisions = Division::orderBy('nama')->get();
+        $totalMeetings = Meeting::whereMonth('created_at', now()->month)
+            ->whereYear('created_at', now()->year)
+            ->count();
 
         return [
-            'total_meetings' => 0,
+            'total_meetings' => $totalMeetings,
             'per_division' => $divisions->map(fn($d) => [
                 'id' => $d->id,
                 'nama' => $d->nama,

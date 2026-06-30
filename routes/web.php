@@ -17,6 +17,7 @@ use App\Livewire\KontrakKerjaTable;
 use App\Livewire\UserTable;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\BonusController;
 use App\Http\Controllers\PromotionController;
 use Illuminate\Support\Facades\Route;
 
@@ -83,6 +84,13 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('meeting')->name('meeting.')->group(function () {
         Route::get('/jadwal', [MeetingController::class, 'jadwal'])->name('jadwal');
         Route::get('/permintaan', [MeetingController::class, 'permintaan'])->name('permintaan');
+        Route::post('/permintaan', [MeetingController::class, 'storePermintaan'])->name('permintaan.store');
+        Route::put('/permintaan/{meetingRequest}/setujui', [MeetingController::class, 'setujui'])->name('permintaan.setujui');
+        Route::put('/permintaan/{meetingRequest}/tolak', [MeetingController::class, 'tolak'])->name('permintaan.tolak');
+    });
+
+    Route::prefix('bonus')->name('bonus.')->group(function () {
+        Route::get('/', [BonusController::class, 'index'])->name('index');
     });
 
     Route::get('/kelola-akun', UserTable::class)->name('kelola-akun');

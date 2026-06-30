@@ -989,46 +989,6 @@
 
             {{-- Panel: Riwayat Payroll --}}
             <div x-show="activeTab === 'payroll'" x-cloak class="p-7">
-                {{-- Stat Cards --}}
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                    <div class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 p-4">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-950 flex items-center justify-center">
-                                <svg class="w-[18px] h-[18px] text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Gaji Pokok</span>
-                        </div>
-                        <p class="text-lg font-extrabold text-gray-900 dark:text-gray-100" x-text="'Rp ' + Number(payrollStats.gaji_pokok).toLocaleString('id-ID')"></p>
-                    </div>
-                    <div class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 p-4">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-9 h-9 rounded-lg bg-blue-50 dark:bg-blue-950 flex items-center justify-center">
-                                <svg class="w-[18px] h-[18px] text-blue-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Total Tunjangan</span>
-                        </div>
-                        <p class="text-lg font-extrabold text-gray-900 dark:text-gray-100" x-text="'Rp ' + Number(payrollStats.total_tunjangan).toLocaleString('id-ID')"></p>
-                    </div>
-                    <div class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 p-4">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-9 h-9 rounded-lg bg-red-50 dark:bg-red-950 flex items-center justify-center">
-                                <svg class="w-[18px] h-[18px] text-red-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Total Potongan</span>
-                        </div>
-                        <p class="text-lg font-extrabold text-gray-900 dark:text-gray-100" x-text="'Rp ' + Number(payrollStats.total_potongan).toLocaleString('id-ID')"></p>
-                    </div>
-                    <div class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-900 p-4">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-9 h-9 rounded-lg bg-violet-50 dark:bg-violet-950 flex items-center justify-center">
-                                <svg class="w-[18px] h-[18px] text-violet-600" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400">Gaji Bersih</span>
-                        </div>
-                        <p class="text-lg font-extrabold text-gray-900 dark:text-gray-100" x-text="'Rp ' + Number(payrollStats.gaji_bersih).toLocaleString('id-ID')"></p>
-                    </div>
-                </div>
-
                 {{-- Table --}}
                 <div x-show="payrollList.length > 0">
                     <div class="rounded-xl border border-gray-200 dark:border-gray-600 overflow-hidden">

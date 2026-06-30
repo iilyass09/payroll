@@ -9,6 +9,7 @@ class LeaveRequest extends Model
 {
     protected $fillable = [
         'employee_id',
+        'atasan_id',
         'jenis',
         'tanggal_mulai',
         'tanggal_selesai',
@@ -29,5 +30,10 @@ class LeaveRequest extends Model
     public function employee(): BelongsTo
     {
         return $this->belongsTo(Employee::class);
+    }
+
+    public function atasan(): BelongsTo
+    {
+        return $this->belongsTo(Employee::class, 'atasan_id');
     }
 }

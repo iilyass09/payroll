@@ -139,9 +139,25 @@
             font-size: 12px;
             margin-top: 5px;
         }
+        .watermark {
+            position: fixed;
+            top: 42%;
+            left: 8%;
+            font-size: 52px;
+            font-weight: bold;
+            color: #cccccc;
+            opacity: 0.2;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            z-index: 9999;
+            pointer-events: none;
+            transform: rotate(-40deg);
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
+    <div class="watermark">Private &amp; Confidential</div>
     <div class="header">
         <div class="company-name">PT. JOHEN SUKSES ABADI</div>
         <h1>SLIP GAJI</h1>

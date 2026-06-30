@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\LeaveRequest;
 use App\Models\Employee;
+use App\Models\Position;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -64,8 +65,11 @@ class CutiIzinTable extends Component
         $selesai = \Carbon\Carbon::parse($this->pengajuanTanggalSelesai);
         $durasi = $mulai->diffInDays($selesai) + 1;
 
+        $atasan = $this->getAtasan($employee);
+
         LeaveRequest::create([
             'employee_id' => $employee->id,
+            'atasan_id' => $atasan?->id,
             'jenis' => $this->pengajuanJenis,
             'tanggal_mulai' => $this->pengajuanTanggalMulai,
             'tanggal_selesai' => $this->pengajuanTanggalSelesai,
@@ -81,18 +85,36 @@ class CutiIzinTable extends Component
 
     public function setujui(int $id, string $level): void
     {
-        Gate::authorize('update-data');
-        $lr = LeaveRequest::findOrFail($id);
+        $lr = LeaveRequest::with('employee')->findOrFail($id);
+        $this->authorizeApproval($lr, $level);
         $lr->update([$level => 'disetujui']);
         $this->dispatch('notify', type: 'success', message: 'Pengajuan disetujui.');
     }
 
     public function tolak(int $id, string $level): void
     {
-        Gate::authorize('update-data');
-        $lr = LeaveRequest::findOrFail($id);
+        $lr = LeaveRequest::with('employee')->findOrFail($id);
+        $this->authorizeApproval($lr, $level);
         $lr->update([$level => 'ditolak']);
         $this->dispatch('notify', type: 'success', message: 'Pengajuan ditolak.');
+    }
+
+    private function authorizeApproval(LeaveRequest $lr, string $level): void
+    {
+        $user = auth()->user();
+
+        if ($level === 'persetujuan_koor') {
+            $userEmployee = $user->employee;
+            if (!$userEmployee || $userEmployee->id !== $lr->atasan_id) {
+                abort(403, 'Hanya atasan yang dapat menyetujui pengajuan ini.');
+            }
+        } elseif ($level === 'persetujuan_hr') {
+            if ($user->id !== 4 && !$this->isHr($user)) {
+                abort(403, 'Hanya Yuliana Sventy yang dapat menyetujui persetujuan HR.');
+            }
+        } else {
+            abort(403);
+        }
     }
 
     public function hapus(int $id): void
@@ -131,9 +153,10 @@ class CutiIzinTable extends Component
     public function render()
     {
         $user = auth()->user();
+        $userEmployee = $user->employee;
 
         if ($user->isKaryawan()) {
-            $employee = $user->employee;
+            $employee = $userEmployee;
 
             if (!$employee) {
                 $leaveRequests = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
@@ -178,7 +201,7 @@ class CutiIzinTable extends Component
                 ->sum(fn($lr) => (int) filter_var($lr->durasi, FILTER_SANITIZE_NUMBER_INT));
             $sisaCuti = max(0, $jatahCuti - $usedCuti);
 
-            $leaveRequests = LeaveRequest::with('employee')
+            $leaveRequests = LeaveRequest::with('employee', 'atasan')
                 ->where('employee_id', $employee->id)
                 ->when($this->filterJenis, function ($query) {
                     $query->where('jenis', $this->filterJenis);
@@ -191,12 +214,21 @@ class CutiIzinTable extends Component
             ))->with('karyawanView', true);
         }
 
+        $isDireksi = $user->isDireksi();
+        $isHr = $userEmployee && in_array($userEmployee->position, [
+            'Human Resource Generalist', 'Admin HR', 'Admin GA', 'OB'
+        ]);
+        $lihatSemua = $user->id === 4 || $isHr || $isDireksi;
+
         $totalPengajuan = LeaveRequest::count();
         $totalCuti = LeaveRequest::where('jenis', 'cuti_tahunan')->count();
         $totalIzin = LeaveRequest::where('jenis', 'izin')->count();
         $menunggu = LeaveRequest::where('persetujuan_koor', 'menunggu')->orWhere('persetujuan_hr', 'menunggu')->count();
 
-        $leaveRequests = LeaveRequest::with('employee')
+        $leaveRequests = LeaveRequest::with('employee', 'atasan')
+            ->when($userEmployee && !$lihatSemua, function ($query) use ($userEmployee) {
+                $query->where('atasan_id', $userEmployee->id);
+            })
             ->when($this->search, function ($query) {
                 $query->whereHas('employee', function ($q) {
                     $q->where('nama', 'like', "%{$this->search}%")
@@ -216,7 +248,31 @@ class CutiIzinTable extends Component
             ->paginate(10);
 
         return view('livewire.cuti-izin-table', compact(
-            'leaveRequests', 'totalPengajuan', 'totalCuti', 'totalIzin', 'menunggu'
+            'leaveRequests', 'totalPengajuan', 'totalCuti', 'totalIzin', 'menunggu', 'userEmployee', 'isHr', 'user'
         ))->with('karyawanView', false);
+    }
+
+    private function getAtasan(Employee $employee): ?Employee
+    {
+        $position = Position::where('nama', $employee->position)->first();
+        if (!$position || !$position->parent_id) return null;
+
+        $current = $position->parent;
+        while ($current) {
+            $atasan = Employee::where('position', $current->nama)->first();
+            if ($atasan) return $atasan;
+            $current = $current->parent;
+        }
+
+        return null;
+    }
+
+    private function isHr($user): bool
+    {
+        $emp = $user->employee;
+        if (!$emp) return false;
+        return in_array($emp->position, [
+            'Human Resource Generalist', 'Admin HR', 'Admin GA', 'OB'
+        ]);
     }
 }
