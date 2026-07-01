@@ -49,7 +49,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"cyan,yellow,green,magenta\" \"php artisan serve\" \"php artisan queue:listen --tries=1 --timeout=0\" \"php artisan queue:listen --queue=email --tries=3 --timeout=300\" \"npm run dev\" --names=server,queue,email,vite --kill-others || exit /b 0"
+            "npx concurrently -c \"cyan,yellow,green,magenta,red\" \"php artisan serve\" \"queue-default.bat\" \"queue-email.bat\" \"npm run dev\" \"node env-watcher.cjs\" --names=server,queue,email,vite,envwatcher --kill-others || exit /b 0"
         ],
         "test": [
             "@php artisan config:clear --ansi @no_additional_args",
