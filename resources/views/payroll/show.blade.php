@@ -1,4 +1,4 @@
-<x-app-layout title="Detail Payroll">
+<x-app-layout title="Detail Slip Gaji">
 
     <div x-data="progressModal()" x-init="init()" class="contents">
         {{-- Progress Modal --}}
@@ -162,7 +162,7 @@
 
     @push('topbar-left')
         <div>
-            <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Detail Payroll</h1>
+            <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Detail Slip Gaji</h1>
             <p class="text-xs text-gray-400 mt-0.5">Periode {{ $import->periode }}</p>
         </div>
     @endpush
@@ -185,7 +185,7 @@
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow-lg shadow-primary-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Payroll</p>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Slip Gaji</p>
             </div>
             <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">Rp {{ number_format($import->total_payroll, 0, ',', '.') }}</p>
         </div>

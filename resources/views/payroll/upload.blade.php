@@ -1,11 +1,11 @@
 @push('topbar-left')
     <div>
-        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Upload Payroll</h1>
-        <p class="text-xs text-gray-400 mt-0.5">Upload file Excel berisi data payroll karyawan</p>
+        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Upload Slip Gaji</h1>
+        <p class="text-xs text-gray-400 mt-0.5">Upload file Excel berisi data slip gaji karyawan</p>
     </div>
 @endpush
 
-<x-app-layout title="Upload Payroll">
+<x-app-layout title="Upload Slip Gaji">
 
 
     <div class="card p-6">
@@ -13,7 +13,7 @@
             @csrf
 
             <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Periode Payroll</label>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1.5">Periode</label>
                 <div class="flex items-center gap-3">
                     <div class="relative flex-1">
                         <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>

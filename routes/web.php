@@ -9,7 +9,7 @@ use App\Http\Controllers\PayrollPreviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return auth()->check() ? redirect('/dashboard') : redirect('/login');
+    return auth()->check() ? redirect('/history') : redirect('/login');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -34,6 +34,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [HistoryController::class, 'index'])->name('index');
         Route::get('/{import}', [HistoryController::class, 'show'])->name('show');
     });
+
 });
 
 require __DIR__.'/auth.php';

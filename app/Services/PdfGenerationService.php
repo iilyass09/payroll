@@ -10,8 +10,8 @@ class PdfGenerationService
 {
     public function generate(PayrollDetail $detail, string $periode, string $password = ''): string
     {
-        $filename = sprintf('%s_%s_%s.pdf', $detail->nik, str_replace(' ', '', $periode), $detail->nama);
-        $path = "payroll/{$detail->payroll_import_id}/{$filename}";
+        $filename = sprintf('Slip Gaji - %s - %s.pdf', $periode, $detail->nama);
+        $path = "slip-gaji/{$detail->payroll_import_id}/{$filename}";
 
         $html = view('pdf.slip-gaji', [
             'detail' => $detail,

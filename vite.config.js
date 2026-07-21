@@ -10,9 +10,9 @@ export default defineConfig({
     ],
     server: {
         host: '0.0.0.0',
-        port: 5174, // sesuaikan dengan port Vite yang muncul
+        port: 5174,
         hmr: {
-            host: '192.168.1.98', // IP laptop kamu
+            host: 'localhost',
         },
     },
 });

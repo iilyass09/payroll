@@ -1,7 +1,7 @@
 @push('topbar-left')
     <div>
         <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Dashboard</h1>
-        <p class="text-xs text-gray-400 mt-0.5">Ringkasan payroll</p>
+        <p class="text-xs text-gray-400 mt-0.5">Ringkasan slip gaji</p>
     </div>
 @endpush
 
@@ -16,7 +16,7 @@
             <span class="badge-info">Total</span>
         </div>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $totalImports }}</p>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Import Payroll</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Import Slip Gaji</p>
     </div>
 
     <div class="card p-5">
@@ -38,7 +38,7 @@
             <span class="badge-warning">Total</span>
         </div>
         <p class="text-2xl font-bold text-gray-900 dark:text-gray-100">Rp {{ number_format($totalPayroll, 0, ',', '.') }}</p>
-        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Nominal Payroll</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Total Nominal Slip Gaji</p>
     </div>
 </div>
 
