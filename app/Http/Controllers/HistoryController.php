@@ -18,17 +18,22 @@ class HistoryController extends Controller
 
         $selectedYear = $request->integer('year', $availableYears[0] ?? now()->year);
 
+        $yearImportIds = PayrollImport::where('periode', 'LIKE', "%{$selectedYear}")->pluck('id');
+
         $imports = PayrollImport::with('uploadedBy')
             ->withCount('payrollDetails')
-            ->where('periode', 'LIKE', "%{$selectedYear}")
+            ->whereIn('id', $yearImportIds)
             ->latest()
             ->paginate(12);
 
         $stats = [
-            'total_payroll' => PayrollImport::sum('total_payroll'),
-            'total_employee' => PayrollImport::sum('total_employee'),
-            'email_sent' => PayrollDetail::where('status', 'sent')->count(),
-            'email_failed' => PayrollDetail::where('status', 'failed')->count(),
+            'total_payroll' => PayrollImport::whereIn('id', $yearImportIds)->sum('total_payroll'),
+            'total_employee' => PayrollDetail::whereIn('payroll_import_id', $yearImportIds)
+                ->distinct()->count('nik'),
+            'email_sent' => PayrollDetail::whereIn('payroll_import_id', $yearImportIds)
+                ->where('status', 'sent')->count(),
+            'email_failed' => PayrollDetail::whereIn('payroll_import_id', $yearImportIds)
+                ->where('status', 'failed')->count(),
         ];
 
         return view('history.index', compact('imports', 'availableYears', 'selectedYear', 'stats'));
