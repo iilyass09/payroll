@@ -13,9 +13,14 @@ class PdfGenerationService
         $filename = sprintf('Slip Gaji - %s - %s.pdf', $periode, $detail->nama);
         $path = "slip-gaji/{$detail->payroll_import_id}/{$filename}";
 
+        $logoPath = public_path('logo.png');
+        $logoBase64 = base64_encode(file_get_contents($logoPath));
+        $logoSrc = 'data:image/png;base64,' . $logoBase64;
+
         $html = view('pdf.slip-gaji', [
             'detail' => $detail,
             'periode' => $periode,
+            'logoSrc' => $logoSrc,
         ])->render();
 
         $dompdf = new Dompdf();

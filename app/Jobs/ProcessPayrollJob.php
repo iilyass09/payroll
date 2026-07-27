@@ -27,8 +27,10 @@ class ProcessPayrollJob implements ShouldQueue
             $detail->update(['pdf_path' => $path]);
         }
 
-        foreach ($details as $detail) {
-            SendEmailJob::dispatch($detail, $this->payrollImport->periode)->onQueue('email');
+        foreach ($details as $i => $detail) {
+            SendEmailJob::dispatch($detail, $this->payrollImport->periode)
+                ->onQueue('email')
+                ->delay(now()->addSeconds($i * 3));
         }
     }
 }

@@ -5,7 +5,7 @@
     </div>
 @endpush
 @push('topbar-right')
-    <a href="{{ route('history.index') }}" class="btn-ghost">
+    <a href="{{ route('payroll.index') }}" class="btn-ghost">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"/></svg>
         Kembali
     </a>

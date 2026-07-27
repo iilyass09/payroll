@@ -9,13 +9,14 @@ use App\Http\Controllers\PayrollPreviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return auth()->check() ? redirect('/history') : redirect('/login');
+    return auth()->check() ? redirect('/payroll') : redirect('/login');
 });
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::prefix('payroll')->name('payroll.')->group(function () {
+        Route::get('/', [HistoryController::class, 'index'])->name('index');
         Route::get('/upload', [PayrollImportController::class, 'create'])->name('upload');
         Route::post('/upload', [PayrollImportController::class, 'store'])->name('store');
         Route::delete('/{import}', [PayrollImportController::class, 'destroy'])->name('destroy');
@@ -28,11 +29,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{import}/email-logs', [EmailLogController::class, 'index'])->name('email-logs');
         Route::post('/email-logs/{detail}/retry', [EmailLogController::class, 'retry'])->name('email-retry');
         Route::post('/{import}/retry-all', [EmailLogController::class, 'retryAll'])->name('email-retry-all');
-    });
-
-    Route::prefix('history')->name('history.')->group(function () {
-        Route::get('/', [HistoryController::class, 'index'])->name('index');
-        Route::get('/{import}', [HistoryController::class, 'show'])->name('show');
     });
 
 });

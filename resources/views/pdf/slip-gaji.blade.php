@@ -159,6 +159,7 @@
 <body>
     <div class="watermark">Private &amp; Confidential</div>
     <div class="header">
+        <img src="{{ $logoSrc }}" alt="PT. Johen Sukses Abadi" style="height: 55px; margin-bottom: 8px;">
         <div class="company-name">PT. JOHEN SUKSES ABADI</div>
         <h1>SLIP GAJI</h1>
     </div>

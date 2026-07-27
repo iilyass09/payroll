@@ -41,6 +41,8 @@ class EmailService
             ]);
 
             $detail->update(['status' => 'failed']);
+
+            throw $e;
         }
     }
 
