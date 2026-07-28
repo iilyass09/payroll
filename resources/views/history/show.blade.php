@@ -71,7 +71,7 @@
                         <th class="px-6 py-3">Nama</th>
                         <th class="px-6 py-3">Email</th>
                         <th class="px-6 py-3">Jabatan</th>
-                        <th class="px-6 py-3 text-right">THP</th>
+                        <th class="px-6 py-3 text-right">Total Diterima</th>
                         <th class="px-6 py-3 text-center">Status</th>
                         <th class="px-6 py-3">PDF</th>
                     </tr>
