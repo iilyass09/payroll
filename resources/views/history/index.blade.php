@@ -1,7 +1,10 @@
 @push('topbar-left')
-    <div>
-        <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Slip Gaji</h1>
-        <p class="text-xs text-gray-400 mt-0.5">Data slip gaji yang pernah diupload</p>
+    <div class="flex items-center gap-3">
+        <img src="{{ asset('logo.png') }}" alt="Logo" class="h-8 w-auto">
+        <div>
+            <h1 class="text-lg font-bold text-gray-900 dark:text-gray-100">Johen Automation Payslip</h1>
+            <p class="text-xs text-gray-400 mt-0.5">Payroll management & delivery system</p>
+        </div>
     </div>
 @endpush
 
