@@ -10,7 +10,7 @@ class PdfGenerationService
 {
     public function generate(PayrollDetail $detail, string $periode, string $password = ''): string
     {
-        $filename = sprintf('Slip Gaji - %s - %s.pdf', $periode, $detail->nama);
+        $filename = sprintf('Slip_%s_%s.pdf', $detail->nama, $periode);
         $path = "slip-gaji/{$detail->payroll_import_id}/{$filename}";
 
         $logoPath = public_path('logo.png');

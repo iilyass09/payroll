@@ -141,17 +141,17 @@
         }
         .watermark {
             position: fixed;
-            top: 42%;
-            left: 8%;
-            font-size: 52px;
+            top: 50%;
+            left: 50%;
+            font-size: 32px;
             font-weight: bold;
             color: #cccccc;
             opacity: 0.2;
             text-transform: uppercase;
-            letter-spacing: 12px;
+            letter-spacing: 8px;
             z-index: 9999;
             pointer-events: none;
-            transform: rotate(-40deg);
+            transform: translate(-50%, -50%) rotate(-35deg);
             white-space: nowrap;
         }
     </style>
@@ -246,6 +246,10 @@
             <tr>
                 <td>Potongan Absensi / Jam Kerja</td>
                 <td class="text-right">{{ $detail->potongan_absensi > 0 ? number_format($detail->potongan_absensi, 0, ',', '.') : '-' }}</td>
+            </tr>
+            <tr>
+                <td>Potongan BPJS</td>
+                <td class="text-right">{{ $detail->potongan_bpjs > 0 ? number_format($detail->potongan_bpjs, 0, ',', '.') : '-' }}</td>
             </tr>
             <tr class="total-row">
                 <td>TOTAL PENGELUARAN</td>

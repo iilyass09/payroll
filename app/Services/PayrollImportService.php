@@ -40,7 +40,8 @@ class PayrollImportService
                 'thr_dibayarkan' => (float) ($row[11] ?? 0),
                 'potongan_pinjaman' => (float) ($row[12] ?? 0),
                 'potongan_absensi' => (float) ($row[13] ?? 0),
-                'pdf_password' => trim($row[14] ?? ''),
+                'potongan_bpjs' => (float) ($row[14] ?? 0),
+                'pdf_password' => trim($row[15] ?? ''),
             ];
 
             $validator = Validator::make($rowData, [
@@ -58,6 +59,7 @@ class PayrollImportService
                 'thr_dibayarkan' => 'numeric|min:0',
                 'potongan_pinjaman' => 'numeric|min:0',
                 'potongan_absensi' => 'numeric|min:0',
+                'potongan_bpjs' => 'numeric|min:0',
                 'pdf_password' => 'required|string|min:1|max:50',
             ]);
 
@@ -68,7 +70,7 @@ class PayrollImportService
                     'errors' => $validator->errors()->toArray(),
                 ];
             } else {
-                $rowData['take_home_pay'] = $rowData['gaji_pokok'] + $rowData['tambahan_upah'] + $rowData['bonus'] + $rowData['thr'] + $rowData['apresiasi'] + $rowData['tunjangan_jabatan'] - $rowData['thr_dibayarkan'] - $rowData['potongan_pinjaman'] - $rowData['potongan_absensi'];
+                $rowData['take_home_pay'] = $rowData['gaji_pokok'] + $rowData['tambahan_upah'] + $rowData['bonus'] + $rowData['thr'] + $rowData['apresiasi'] + $rowData['tunjangan_jabatan'] - $rowData['thr_dibayarkan'] - $rowData['potongan_pinjaman'] - $rowData['potongan_absensi'] - $rowData['potongan_bpjs'];
                 $validData[] = $rowData;
             }
         }
@@ -99,6 +101,7 @@ class PayrollImportService
                     'thr_dibayarkan' => $data['thr_dibayarkan'],
                     'potongan_pinjaman' => $data['potongan_pinjaman'],
                     'potongan_absensi' => $data['potongan_absensi'],
+                    'potongan_bpjs' => $data['potongan_bpjs'],
                     'take_home_pay' => $data['take_home_pay'],
                     'pdf_password' => $data['pdf_password'],
                 ]);
@@ -135,6 +138,7 @@ class PayrollImportService
                 'thr_dibayarkan' => 'numeric|min:0',
                 'potongan_pinjaman' => 'numeric|min:0',
                 'potongan_absensi' => 'numeric|min:0',
+                'potongan_bpjs' => 'numeric|min:0',
                 'pdf_password' => 'required|string|min:1|max:50',
             ]);
 

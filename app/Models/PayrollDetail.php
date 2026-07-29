@@ -24,6 +24,7 @@ class PayrollDetail extends Model
         'thr_dibayarkan',
         'potongan_pinjaman',
         'potongan_absensi',
+        'potongan_bpjs',
         'take_home_pay',
         'pdf_password',
         'pdf_path',
@@ -47,6 +48,6 @@ class PayrollDetail extends Model
 
     public function getTotalPengeluaranAttribute(): float
     {
-        return (float) ($this->thr_dibayarkan + $this->potongan_pinjaman + $this->potongan_absensi);
+        return (float) ($this->thr_dibayarkan + $this->potongan_pinjaman + $this->potongan_absensi + $this->potongan_bpjs);
     }
 }
