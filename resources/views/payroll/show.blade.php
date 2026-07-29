@@ -220,15 +220,24 @@
             <span class="badge-info">{{ $import->payrollDetails->count() }} karyawan</span>
         </div>
         <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full min-w-[1050px] table-fixed text-sm">
+                <colgroup>
+                    <col class="w-[11%]">
+                    <col class="w-[15%]">
+                    <col class="w-[22%]">
+                    <col class="w-[12%]">
+                    <col class="w-[17%]">
+                    <col class="w-[10%]">
+                    <col class="w-[13%]">
+                </colgroup>
                 <thead>
                     <tr class="table-header">
                         <th class="px-6 py-3">NIK</th>
                         <th class="px-6 py-3">Nama</th>
                         <th class="px-6 py-3">Email</th>
                         <th class="px-6 py-3">Status</th>
-                        <th class="px-6 py-3 text-right">Total Diterima</th>
-                        <th class="px-6 py-3">PDF</th>
+                        <th class="py-3 pl-6 pr-16">Total Diterima</th>
+                        <th class="py-3 pl-10 pr-6">PDF</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -256,8 +265,8 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="table-cell text-right font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">Rp {{ number_format($detail->take_home_pay, 0, ',', '.') }}</td>
-                            <td class="table-cell whitespace-nowrap">
+                            <td class="py-3 pl-6 pr-16 font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">Rp {{ number_format($detail->take_home_pay, 0, ',', '.') }}</td>
+                            <td class="py-3 pl-10 pr-6 whitespace-nowrap">
                                 @if($detail->pdf_path)
                                     <a href="{{ route('payroll.download-pdf', $detail) }}" class="inline-flex items-center gap-1 text-xs font-medium text-primary-600 hover:text-primary-500 transition-colors">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
@@ -288,5 +297,3 @@
     </div>
 
 </x-app-layout>
-
-

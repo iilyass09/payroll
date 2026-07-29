@@ -56,6 +56,10 @@
         }
         .right-col {
             width: 50%;
+            text-align: right;
+        }
+        .employee-info {
+            margin-left: auto;
         }
         .employee-info td {
             padding: 0px 4px;
@@ -207,7 +211,7 @@
                 <td class="text-right">{{ number_format($detail->gaji_pokok, 0, ',', '.') }}</td>
             </tr>
             <tr>
-                <td>Tambahan Upah</td>
+                <td>Tambahan Upah (Pengembalian / Hari Raya / Perubahan Jabatan / Bonus Buyer dll)</td>
                 <td class="text-right">{{ $detail->tambahan_upah > 0 ? number_format($detail->tambahan_upah, 0, ',', '.') : '-' }}</td>
             </tr>
             <tr>
@@ -219,7 +223,7 @@
                 <td class="text-right">{{ $detail->thr > 0 ? number_format($detail->thr, 0, ',', '.') : '-' }}</td>
             </tr>
             <tr>
-                <td>Apresiasi</td>
+                <td>Apresiasi Absensi</td>
                 <td class="text-right">{{ $detail->apresiasi > 0 ? number_format($detail->apresiasi, 0, ',', '.') : '-' }}</td>
             </tr>
             <tr>
@@ -259,7 +263,7 @@
                 <td class="text-right">{{ $detail->potongan_absensi > 0 ? number_format($detail->potongan_absensi, 0, ',', '.') : '-' }}</td>
             </tr>
             <tr>
-                <td>Potongan BPJS Kesehatan (4%) <i style="font-size:7px;">(oleh Perusahaan)</i></td>
+                <td>Potongan BPJS Kesehatan (4%)</td>
                 <td class="text-right">{{ $detail->potongan_bpjs_kesehatan_4 > 0 ? number_format($detail->potongan_bpjs_kesehatan_4, 0, ',', '.') : '-' }}</td>
             </tr>
             <tr>

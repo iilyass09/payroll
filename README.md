@@ -1,58 +1,125 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Payroll
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web untuk mengimpor data payroll, membuat slip gaji PDF berpassword, dan mengirimkannya kepada karyawan melalui email.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Login pengguna dan riwayat impor payroll per periode.
+- Impor file `.xlsx`, `.xls`, atau `.csv` hingga 10 MB.
+- Validasi data payroll serta perhitungan *take-home pay* otomatis.
+- Pembuatan slip gaji PDF per karyawan dengan password dari file impor.
+- Pengiriman email melalui queue terpisah, pemantauan progres, log status, dan kirim ulang email gagal.
+- Unduh slip gaji dan ringkasan payroll per periode.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.3 dan Laravel 13
+- Blade, Tailwind CSS, Alpine.js, Vite, dan Livewire
+- PhpSpreadsheet untuk membaca file payroll
+- Dompdf untuk menghasilkan PDF
+- Laravel database queue untuk proses PDF dan email
 
-## Learning Laravel
+## Prasyarat
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.3 atau lebih baru
+- Composer 2
+- Node.js 20 atau lebih baru dan npm
+- Database yang didukung Laravel (MySQL/MariaDB atau SQLite untuk pengembangan)
+- SMTP yang aktif untuk pengiriman email produksi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalasi
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/iilyass09/payroll.git
+cd payroll
+composer install
+npm install
+copy .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+php artisan storage:link
+npm run build
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Sesuaikan `.env` untuk koneksi database, aplikasi, dan email. Contoh pengaturan penting:
 
-## Contributing
+```env
+APP_URL=http://localhost:8000
+QUEUE_CONNECTION=database
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=your-username
+MAIL_PASSWORD=your-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=no-reply@example.com
+MAIL_FROM_NAME="Payroll"
+```
 
-## Code of Conduct
+Jangan menyimpan kredensial SMTP atau file `.env` di Git.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Menjalankan aplikasi
 
-## Security Vulnerabilities
+Untuk pengembangan, jalankan server, Vite, dan dua worker queue pada terminal terpisah:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan serve
+npm run dev
+php artisan queue:listen --tries=1 --timeout=0
+php artisan queue:listen --queue=email --tries=3 --timeout=300
+```
 
-## License
+Pada Windows, `composer dev` juga tersedia untuk menjalankan layanan tersebut secara bersamaan. Untuk server Linux, contoh konfigurasi Supervisor tersedia di [`supervisor/payroll-queue.conf`](supervisor/payroll-queue.conf).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Format file impor
+
+Baris pertama diperlakukan sebagai header. Data dibaca berdasarkan urutan kolom berikut:
+
+| No. | Kolom | Wajib |
+| --- | --- | --- |
+| 1 | NIK | Ya |
+| 2 | Nama | Ya |
+| 3 | Email | Ya |
+| 4 | Divisi | Tidak |
+| 5 | Jabatan | Ya |
+| 6 | Gaji pokok | Ya |
+| 7 | Tambahan upah | Tidak |
+| 8 | Bonus | Tidak |
+| 9 | THR | Tidak |
+| 10 | Apresiasi | Tidak |
+| 11 | Tunjangan jabatan | Tidak |
+| 12 | Premi BPJS Kesehatan 4% | Tidak |
+| 13 | THR dibayarkan | Tidak |
+| 14 | Potongan pinjaman | Tidak |
+| 15 | Potongan absensi | Tidak |
+| 16 | Potongan BPJS Kesehatan 4% | Tidak |
+| 17 | Potongan BPJS Kesehatan 1% | Tidak |
+| 18 | Password PDF | Ya |
+
+Semua komponen nominal harus berupa angka nol atau positif. *Take-home pay* dihitung dengan rumus:
+
+```text
+(gaji pokok + tambahan upah + bonus + THR + apresiasi + tunjangan jabatan + premi BPJS 4%)
+- (THR dibayarkan + potongan pinjaman + potongan absensi + potongan BPJS 4% + potongan BPJS 1%)
+```
+
+## Alur operasional
+
+1. Login lalu buka menu Payroll dan unggah file payroll beserta periode.
+2. Periksa data pada halaman pratinjau.
+3. Pilih generate untuk membuat seluruh slip PDF dan menjadwalkan pengiriman email.
+4. Pantau progres pengiriman pada halaman detail payroll.
+5. Gunakan log email untuk meninjau atau mengirim ulang email yang gagal.
+
+## Pengujian
+
+```bash
+composer test
+```
+
+## Catatan keamanan
+
+- Ganti atau hapus akun seed sebelum deployment produksi.
+- Lindungi akses aplikasi dengan HTTPS dan kredensial unik.
+- Pastikan folder `storage` dapat ditulis oleh proses aplikasi, tetapi tidak dapat diakses langsung selain melalui mekanisme aplikasi.
