@@ -15,19 +15,24 @@
         .header {
             text-align: center;
             border-bottom: 2px solid #333;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
             margin-bottom: 18px;
         }
         .header .company-name {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: bold;
             color: #1a56db;
             letter-spacing: 1px;
         }
         .header h1 {
-            font-size: 16px;
-            margin: 4px 0;
+            font-size: 14px;
+            margin: 6px 0 0 0;
             color: #1a1a1a;
+        }
+        .header-logo-row img {
+            height: 32px;
+            display: block;
+            margin: 0 auto 6px auto;
         }
         .identity-section {
             margin-bottom: 18px;
@@ -159,7 +164,9 @@
 <body>
     <div class="watermark">Private &amp; Confidential</div>
     <div class="header">
-        <img src="{{ $logoSrc }}" alt="PT. Johen Sukses Abadi" style="height: 55px; margin-bottom: 8px;">
+        <div class="header-logo-row">
+            <img src="{{ $logoSrc }}" alt="PT. Johen Sukses Abadi">
+        </div>
         <div class="company-name">PT. JOHEN SUKSES ABADI</div>
         <h1>SLIP GAJI</h1>
     </div>
@@ -219,6 +226,10 @@
                 <td>Tunjangan Jabatan</td>
                 <td class="text-right">{{ $detail->tunjangan_jabatan > 0 ? number_format($detail->tunjangan_jabatan, 0, ',', '.') : '-' }}</td>
             </tr>
+            <tr>
+                <td>Premi BPJS Kesehatan (4%)</td>
+                <td class="text-right">{{ $detail->premi_bpjs_kesehatan_4 > 0 ? number_format($detail->premi_bpjs_kesehatan_4, 0, ',', '.') : '-' }}</td>
+            </tr>
             <tr class="total-row">
                 <td>TOTAL PENGHASILAN BRUTO</td>
                 <td class="text-right">Rp {{ number_format($detail->total_penghasilan_bruto, 0, ',', '.') }}</td>
@@ -248,8 +259,12 @@
                 <td class="text-right">{{ $detail->potongan_absensi > 0 ? number_format($detail->potongan_absensi, 0, ',', '.') : '-' }}</td>
             </tr>
             <tr>
-                <td>Potongan BPJS</td>
-                <td class="text-right">{{ $detail->potongan_bpjs > 0 ? number_format($detail->potongan_bpjs, 0, ',', '.') : '-' }}</td>
+                <td>Potongan BPJS Kesehatan (4%) <i style="font-size:7px;">(oleh Perusahaan)</i></td>
+                <td class="text-right">{{ $detail->potongan_bpjs_kesehatan_4 > 0 ? number_format($detail->potongan_bpjs_kesehatan_4, 0, ',', '.') : '-' }}</td>
+            </tr>
+            <tr>
+                <td>Potongan BPJS Kesehatan (1%)</td>
+                <td class="text-right">{{ $detail->potongan_bpjs_kesehatan_1 > 0 ? number_format($detail->potongan_bpjs_kesehatan_1, 0, ',', '.') : '-' }}</td>
             </tr>
             <tr class="total-row">
                 <td>TOTAL PENGELUARAN</td>

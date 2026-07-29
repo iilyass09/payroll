@@ -37,11 +37,13 @@ class PayrollImportService
                 'thr' => (float) ($row[8] ?? 0),
                 'apresiasi' => (float) ($row[9] ?? 0),
                 'tunjangan_jabatan' => (float) ($row[10] ?? 0),
-                'thr_dibayarkan' => (float) ($row[11] ?? 0),
-                'potongan_pinjaman' => (float) ($row[12] ?? 0),
-                'potongan_absensi' => (float) ($row[13] ?? 0),
-                'potongan_bpjs' => (float) ($row[14] ?? 0),
-                'pdf_password' => trim($row[15] ?? ''),
+                'premi_bpjs_kesehatan_4' => (float) ($row[11] ?? 0),
+                'thr_dibayarkan' => (float) ($row[12] ?? 0),
+                'potongan_pinjaman' => (float) ($row[13] ?? 0),
+                'potongan_absensi' => (float) ($row[14] ?? 0),
+                'potongan_bpjs_kesehatan_4' => (float) ($row[15] ?? 0),
+                'potongan_bpjs_kesehatan_1' => (float) ($row[16] ?? 0),
+                'pdf_password' => trim($row[17] ?? ''),
             ];
 
             $validator = Validator::make($rowData, [
@@ -56,10 +58,12 @@ class PayrollImportService
                 'thr' => 'numeric|min:0',
                 'apresiasi' => 'numeric|min:0',
                 'tunjangan_jabatan' => 'numeric|min:0',
+                'premi_bpjs_kesehatan_4' => 'numeric|min:0',
                 'thr_dibayarkan' => 'numeric|min:0',
                 'potongan_pinjaman' => 'numeric|min:0',
                 'potongan_absensi' => 'numeric|min:0',
-                'potongan_bpjs' => 'numeric|min:0',
+                'potongan_bpjs_kesehatan_4' => 'numeric|min:0',
+                'potongan_bpjs_kesehatan_1' => 'numeric|min:0',
                 'pdf_password' => 'required|string|min:1|max:50',
             ]);
 
@@ -70,7 +74,7 @@ class PayrollImportService
                     'errors' => $validator->errors()->toArray(),
                 ];
             } else {
-                $rowData['take_home_pay'] = $rowData['gaji_pokok'] + $rowData['tambahan_upah'] + $rowData['bonus'] + $rowData['thr'] + $rowData['apresiasi'] + $rowData['tunjangan_jabatan'] - $rowData['thr_dibayarkan'] - $rowData['potongan_pinjaman'] - $rowData['potongan_absensi'] - $rowData['potongan_bpjs'];
+                $rowData['take_home_pay'] = $rowData['gaji_pokok'] + $rowData['tambahan_upah'] + $rowData['bonus'] + $rowData['thr'] + $rowData['apresiasi'] + $rowData['tunjangan_jabatan'] + $rowData['premi_bpjs_kesehatan_4'] - $rowData['thr_dibayarkan'] - $rowData['potongan_pinjaman'] - $rowData['potongan_absensi'] - $rowData['potongan_bpjs_kesehatan_4'] - $rowData['potongan_bpjs_kesehatan_1'];
                 $validData[] = $rowData;
             }
         }
@@ -98,10 +102,12 @@ class PayrollImportService
                     'thr' => $data['thr'],
                     'apresiasi' => $data['apresiasi'],
                     'tunjangan_jabatan' => $data['tunjangan_jabatan'],
+                    'premi_bpjs_kesehatan_4' => $data['premi_bpjs_kesehatan_4'],
                     'thr_dibayarkan' => $data['thr_dibayarkan'],
                     'potongan_pinjaman' => $data['potongan_pinjaman'],
                     'potongan_absensi' => $data['potongan_absensi'],
-                    'potongan_bpjs' => $data['potongan_bpjs'],
+                    'potongan_bpjs_kesehatan_4' => $data['potongan_bpjs_kesehatan_4'],
+                    'potongan_bpjs_kesehatan_1' => $data['potongan_bpjs_kesehatan_1'],
                     'take_home_pay' => $data['take_home_pay'],
                     'pdf_password' => $data['pdf_password'],
                 ]);
@@ -135,10 +141,12 @@ class PayrollImportService
                 'thr' => 'numeric|min:0',
                 'apresiasi' => 'numeric|min:0',
                 'tunjangan_jabatan' => 'numeric|min:0',
+                'premi_bpjs_kesehatan_4' => 'numeric|min:0',
                 'thr_dibayarkan' => 'numeric|min:0',
                 'potongan_pinjaman' => 'numeric|min:0',
                 'potongan_absensi' => 'numeric|min:0',
-                'potongan_bpjs' => 'numeric|min:0',
+                'potongan_bpjs_kesehatan_4' => 'numeric|min:0',
+                'potongan_bpjs_kesehatan_1' => 'numeric|min:0',
                 'pdf_password' => 'required|string|min:1|max:50',
             ]);
 
