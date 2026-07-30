@@ -9,13 +9,15 @@
         {{-- Interactive Logo --}}
         <div x-data="logoInteract()" class="text-center mb-8">
             <div class="relative inline-flex items-center justify-center mb-4 group cursor-pointer select-none">
+                {{-- Ambient logo glow --}}
+                <div class="login-logo-glow absolute inset-0 rounded-2xl bg-gradient-to-br from-primary-400 via-primary-500 to-blue-600"></div>
                 {{-- Glow ring --}}
                 <div
                     x-show="glow"
                     x-transition:enter="transition-all duration-700 ease-out"
                     x-transition:enter-start="opacity-0 scale-50"
                     x-transition:enter-end="opacity-100 scale-100"
-                    class="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary-400 via-violet-400 to-amber-400 opacity-30 blur-2xl scale-125"
+                    class="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary-400 via-primary-500 to-blue-600 opacity-30 blur-2xl scale-125"
                 ></div>
                 {{-- Ripple on click --}}
                 <div
@@ -33,7 +35,7 @@
                     :class="{ 'scale-110 -rotate-3': glow }"
                     class="relative transition-all duration-500 ease-out motion-reduce:transition-none motion-reduce:scale-100 motion-reduce:rotate-0"
                 >
-                    <img src="{{ asset('logo.png') }}" alt="Johen Sukses Abadi" width="64" height="64" class="h-16 w-auto relative z-10 drop-shadow-sm">
+                    <img src="{{ asset('logo.png') }}" alt="Johen Sukses Abadi" width="64" height="64" class="login-logo-pulse h-16 w-auto relative z-10 block drop-shadow-sm">
                 </div>
             </div>
             <h1 class="text-xl font-display font-bold text-gray-900 dark:text-gray-100 tracking-tight">Masuk</h1>

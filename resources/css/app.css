@@ -171,6 +171,30 @@
         will-change: transform;
     }
 
+    .login-logo-pulse {
+        animation: loginLogoPulse 2.4s ease-in-out infinite;
+        transform-origin: center;
+        will-change: transform;
+    }
+
+    .login-logo-glow {
+        animation: loginLogoGlow 2.4s ease-in-out infinite;
+        filter: blur(18px);
+        opacity: 0.34;
+        transform: scale(1.18);
+        will-change: transform, opacity;
+    }
+
+    @keyframes loginLogoPulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.12); }
+    }
+
+    @keyframes loginLogoGlow {
+        0%, 100% { opacity: 0.24; transform: scale(1.1); }
+        50% { opacity: 0.5; transform: scale(1.32); }
+    }
+
     .login-input {
         @apply block w-full rounded-xl border bg-white dark:bg-gray-800 px-4 py-3 text-sm text-gray-900 dark:text-gray-100 shadow-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 outline-none transition-all duration-300;
         border-color: theme('colors.gray.200');
@@ -286,6 +310,14 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+        .login-logo-pulse {
+            animation: none;
+        }
+
+        .login-logo-glow {
+            animation: none;
+        }
+
         .login-stagger-1,
         .login-stagger-2,
         .login-stagger-3,
