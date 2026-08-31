@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailLogController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\PayrollController;
@@ -13,8 +12,6 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
     Route::prefix('payroll')->name('payroll.')->group(function () {
         Route::get('/', [HistoryController::class, 'index'])->name('index');
         Route::get('/upload', [PayrollImportController::class, 'create'])->name('upload');

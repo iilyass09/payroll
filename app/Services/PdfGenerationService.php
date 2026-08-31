@@ -21,6 +21,7 @@ class PdfGenerationService
             'detail' => $detail,
             'periode' => $periode,
             'logoSrc' => $logoSrc,
+            'tanggalCetak' => now()->locale('id')->isoFormat('D MMMM YYYY'),
         ])->render();
 
         $dompdf = new Dompdf();

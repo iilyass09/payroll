@@ -29,7 +29,7 @@
             <p>Kelola dan generate slip gaji, serta kirim email ke karyawan dengan mudah dalam satu platform.</p>
             <div class="buttons">
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="btn-primary">Dashboard</a>
+                    <a href="{{ url('/payroll') }}" class="btn-primary">Slip Gaji</a>
                 @else
                     <a href="{{ route('login') }}" class="btn-primary">Masuk</a>
                     @if (Route::has('register'))

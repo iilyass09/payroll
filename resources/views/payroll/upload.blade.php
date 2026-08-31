@@ -146,7 +146,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     Upload & Validasi
                 </button>
-                <a href="{{ route('dashboard') }}" class="btn-ghost">Batal</a>
+                <a href="{{ route('payroll.index') }}" class="btn-ghost">Batal</a>
             </div>
         </form>
     </div>

@@ -303,7 +303,7 @@
     <hr class="footer-line">
 
     <div class="signature-section">
-        <div class="city-date">Bandung, 30 {{ $periode }}</div>
+        <div class="city-date">Bandung, {{ $tanggalCetak }}</div>
 
         <div style="margin-top: 35px;"></div>
 
