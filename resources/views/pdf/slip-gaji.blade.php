@@ -15,8 +15,8 @@
         .header {
             text-align: center;
             border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-            margin-bottom: 18px;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
         }
         .header .company-name {
             font-size: 13px;
@@ -29,15 +29,22 @@
             margin: 6px 0 0 0;
             color: #1a1a1a;
         }
+        .header .slip-note {
+            font-size: 8px;
+            font-weight: normal;
+            font-style: italic;
+            color: #999;
+            margin-top: 2px;
+        }
         .header-logo-row img {
             height: 32px;
             display: block;
             margin: 0 auto 6px auto;
         }
         .identity-section {
-            margin-bottom: 18px;
+            margin-bottom: 14px;
             border-bottom: 2px solid #333;
-            padding-bottom: 12px;
+            padding-bottom: 10px;
         }
         .identity-table {
             width: 100%;
@@ -63,7 +70,11 @@
         }
         .employee-info td {
             padding: 0px 4px;
-            line-height: 1.6;
+            line-height: 1.4;
+        }
+        .employee-info td:last-child {
+            word-break: break-word;
+            max-width: 200px;
         }
         .identity-table .label {
             font-weight: bold;
@@ -74,7 +85,7 @@
             font-weight: bold;
             font-size: 12px;
             padding: 6px 8px;
-            margin-top: 14px;
+            margin-top: 10px;
             margin-bottom: 2px;
         }
         .section-title.penerimaan {
@@ -133,15 +144,15 @@
         .footer-line {
             border: none;
             border-top: 1px solid #ccc;
-            margin: 20px 0 10px 0;
+            margin: 14px 0 8px 0;
         }
         .signature-section {
             text-align: center;
-            margin-top: 10px;
+            margin-top: 6px;
         }
         .signature-section .city-date {
             font-size: 11px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
         .signature-section .company-sign {
             font-weight: bold;
@@ -173,6 +184,7 @@
         </div>
         <div class="company-name">PT. JOHEN SUKSES ABADI</div>
         <h1>SLIP GAJI</h1>
+        <p class="slip-note">Slip ini dicetak secara elektronik</p>
     </div>
 
     <div class="identity-section">
@@ -293,7 +305,7 @@
     <div class="signature-section">
         <div class="city-date">Bandung, 30 {{ $periode }}</div>
 
-        <div style="margin-top: 50px;"></div>
+        <div style="margin-top: 35px;"></div>
 
         <div class="company-sign">PT. Johen Sukses Abadi</div>
     </div>
