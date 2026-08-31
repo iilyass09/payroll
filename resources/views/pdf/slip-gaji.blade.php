@@ -6,45 +6,38 @@
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 11px;
-            line-height: 1.5;
+            font-size: 10px;
+            line-height: 1.4;
             margin: 0;
-            padding: 25px 30px;
+            padding: 20px 25px;
             color: #333;
         }
         .header {
             text-align: center;
             border-bottom: 2px solid #333;
-            padding-bottom: 8px;
-            margin-bottom: 14px;
+            padding-bottom: 6px;
+            margin-bottom: 8px;
         }
         .header .company-name {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             color: #1a56db;
             letter-spacing: 1px;
         }
         .header h1 {
-            font-size: 14px;
-            margin: 6px 0 0 0;
+            font-size: 13px;
+            margin: 4px 0 0 0;
             color: #1a1a1a;
         }
-        .header .slip-note {
-            font-size: 8px;
-            font-weight: normal;
-            font-style: italic;
-            color: #999;
-            margin-top: 2px;
-        }
         .header-logo-row img {
-            height: 32px;
+            height: 28px;
             display: block;
-            margin: 0 auto 6px auto;
+            margin: 0 auto 4px auto;
         }
         .identity-section {
-            margin-bottom: 14px;
+            margin-bottom: 8px;
             border-bottom: 2px solid #333;
-            padding-bottom: 10px;
+            padding-bottom: 6px;
         }
         .identity-table {
             width: 100%;
@@ -52,12 +45,12 @@
         }
         .identity-table td {
             vertical-align: top;
-            padding: 2px 6px;
-            font-size: 11px;
+            padding: 1px 5px;
+            font-size: 10px;
         }
         .left-col {
             width: 50%;
-            line-height: 1.6;
+            line-height: 1.5;
             color: #333;
             font-style: italic;
         }
@@ -78,15 +71,15 @@
         }
         .identity-table .label {
             font-weight: bold;
-            width: 85px;
+            width: 80px;
             color: #555;
         }
         .section-title {
             font-weight: bold;
-            font-size: 12px;
-            padding: 6px 8px;
-            margin-top: 10px;
-            margin-bottom: 2px;
+            font-size: 11px;
+            padding: 4px 8px;
+            margin-top: 6px;
+            margin-bottom: 1px;
         }
         .section-title.penerimaan {
             background: #e8f5e9;
@@ -102,62 +95,70 @@
         }
         .detail-table th {
             background: #f5f5f5;
-            padding: 5px 8px;
+            padding: 3px 8px;
             text-align: left;
-            font-size: 10px;
+            font-size: 9px;
             text-transform: uppercase;
             border-bottom: 1px solid #ddd;
         }
         .detail-table td {
-            padding: 4px 8px;
+            padding: 3px 8px;
             border-bottom: 1px solid #f0f0f0;
-            font-size: 11px;
+            font-size: 10px;
         }
         .detail-table .text-right {
             text-align: right;
         }
+        .sub-item td:first-child {
+            padding-left: 18px;
+            font-size: 9px;
+            color: #555;
+            border-left: 2px dashed #aaa;
+        }
+        .sub-item td:last-child {
+            font-size: 9px;
+            color: #555;
+            border-left: 2px dashed #aaa;
+        }
         .total-row td {
             font-weight: bold;
-            font-size: 12px;
+            font-size: 10px;
             border-top: 2px solid #333;
-            padding-top: 6px;
+            padding-top: 4px;
         }
         .grand-total td {
             font-weight: bold;
-            font-size: 13px;
+            font-size: 12px;
             border-top: 3px double #1a56db;
-            padding-top: 6px;
+            padding-top: 4px;
             color: #1a56db;
         }
         .terbilang {
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
             font-style: italic;
-            padding: 8px;
-            margin-top: 4px;
+            padding: 5px;
+            margin-top: 3px;
             border: 1px dashed #999;
             background: #fafafa;
-        }
-        .spacer {
-            height: 20px;
         }
         .footer-line {
             border: none;
             border-top: 1px solid #ccc;
-            margin: 14px 0 8px 0;
+            margin: 8px 0 5px 0;
         }
         .signature-section {
             text-align: center;
-            margin-top: 6px;
+            margin-top: 4px;
         }
         .signature-section .city-date {
-            font-size: 11px;
-            margin-bottom: 30px;
+            font-size: 10px;
+            margin-bottom: 20px;
         }
         .signature-section .company-sign {
             font-weight: bold;
-            font-size: 12px;
-            margin-top: 5px;
+            font-size: 10px;
+            margin-top: 4px;
         }
         .watermark {
             position: fixed;
@@ -184,7 +185,6 @@
         </div>
         <div class="company-name">PT. JOHEN SUKSES ABADI</div>
         <h1>SLIP GAJI</h1>
-        <p class="slip-note">Slip ini dicetak secara elektronik</p>
     </div>
 
     <div class="identity-section">
@@ -222,30 +222,60 @@
                 <td>Gaji Pokok</td>
                 <td class="text-right">{{ number_format($detail->gaji_pokok, 0, ',', '.') }}</td>
             </tr>
-            <tr>
-                <td>Tambahan Upah (Pengembalian / Hari Raya / Perubahan Jabatan / Bonus Buyer dll)</td>
-                <td class="text-right">{{ $detail->tambahan_upah > 0 ? number_format($detail->tambahan_upah, 0, ',', '.') : '-' }}</td>
-            </tr>
-            <tr>
-                <td>Bonus</td>
-                <td class="text-right">{{ $detail->bonus > 0 ? number_format($detail->bonus, 0, ',', '.') : '-' }}</td>
-            </tr>
-            <tr>
-                <td>THR</td>
-                <td class="text-right">{{ $detail->thr > 0 ? number_format($detail->thr, 0, ',', '.') : '-' }}</td>
-            </tr>
-            <tr>
-                <td>Apresiasi Absensi</td>
-                <td class="text-right">{{ $detail->apresiasi > 0 ? number_format($detail->apresiasi, 0, ',', '.') : '-' }}</td>
-            </tr>
+            @if($detail->tunjangan_jabatan > 0)
             <tr>
                 <td>Tunjangan Jabatan</td>
-                <td class="text-right">{{ $detail->tunjangan_jabatan > 0 ? number_format($detail->tunjangan_jabatan, 0, ',', '.') : '-' }}</td>
+                <td class="text-right">{{ number_format($detail->tunjangan_jabatan, 0, ',', '.') }}</td>
             </tr>
+            @endif
+            @if($detail->total_tambahan_upah_sub > 0)
+            <tr>
+                <td><strong>Tambahan Upah</strong></td>
+                <td class="text-right"><strong>{{ number_format($detail->total_tambahan_upah_sub, 0, ',', '.') }}</strong></td>
+            </tr>
+            @if($detail->bonus_absensi_full > 0)
+            <tr class="sub-item">
+                <td>Bonus Absensi Full 1 Bulan</td>
+                <td class="text-right">{{ number_format($detail->bonus_absensi_full, 0, ',', '.') }}</td>
+            </tr>
+            @endif
+            @if($detail->pengembalian > 0)
+            <tr class="sub-item">
+                <td>Pengembalian</td>
+                <td class="text-right">{{ number_format($detail->pengembalian, 0, ',', '.') }}</td>
+            </tr>
+            @endif
+            @if($detail->tips_pelanggan > 0)
+            <tr class="sub-item">
+                <td>Tips Pelanggan</td>
+                <td class="text-right">{{ number_format($detail->tips_pelanggan, 0, ',', '.') }}</td>
+            </tr>
+            @endif
+            @if($detail->insentif_creative > 0)
+            <tr class="sub-item">
+                <td>Insentif View/Sold Creative; CC, Video Editor & Resepsionist</td>
+                <td class="text-right">{{ number_format($detail->insentif_creative, 0, ',', '.') }}</td>
+            </tr>
+            @endif
+            @if($detail->bonus_absensi_full <= 0 && $detail->pengembalian <= 0 && $detail->tips_pelanggan <= 0 && $detail->insentif_creative <= 0)
+            @if($detail->premi_bpjs_kesehatan_4 > 0)
             <tr>
                 <td>Premi BPJS Kesehatan (4%)</td>
-                <td class="text-right">{{ $detail->premi_bpjs_kesehatan_4 > 0 ? number_format($detail->premi_bpjs_kesehatan_4, 0, ',', '.') : '-' }}</td>
+                <td class="text-right">{{ number_format($detail->premi_bpjs_kesehatan_4, 0, ',', '.') }}</td>
             </tr>
+            @endif
+            @if($detail->tambahan_upah_bonus > 0)
+            <tr>
+                <td>Tambahan Upah (Bonus Sold, View, dll)</td>
+                <td class="text-right">{{ number_format($detail->tambahan_upah_bonus, 0, ',', '.') }}</td>
+            </tr>
+            @endif
+            @if($detail->thr > 0)
+            <tr>
+                <td>THR</td>
+                <td class="text-right">{{ number_format($detail->thr, 0, ',', '.') }}</td>
+            </tr>
+            @endif
             <tr class="total-row">
                 <td>TOTAL PENGHASILAN BRUTO</td>
                 <td class="text-right">Rp {{ number_format($detail->total_penghasilan_bruto, 0, ',', '.') }}</td>
@@ -262,26 +292,42 @@
             </tr>
         </thead>
         <tbody>
+            @if($detail->thr_dibayarkan > 0)
             <tr>
-                <td>THR yang sudah dibayarkan</td>
-                <td class="text-right">{{ $detail->thr_dibayarkan > 0 ? number_format($detail->thr_dibayarkan, 0, ',', '.') : '-' }}</td>
+                <td>THR Dibayarkan</td>
+                <td class="text-right">{{ number_format($detail->thr_dibayarkan, 0, ',', '.') }}</td>
             </tr>
+            @endif
+            @if($detail->potongan_pinjaman > 0)
             <tr>
-                <td>Potongan pinjaman karyawan</td>
-                <td class="text-right">{{ $detail->potongan_pinjaman > 0 ? number_format($detail->potongan_pinjaman, 0, ',', '.') : '-' }}</td>
+                <td>Potongan Pinjaman</td>
+                <td class="text-right">{{ number_format($detail->potongan_pinjaman, 0, ',', '.') }}</td>
             </tr>
+            @endif
+            @if($detail->potongan_absensi > 0)
             <tr>
-                <td>Potongan Absensi / Jam Kerja</td>
-                <td class="text-right">{{ $detail->potongan_absensi > 0 ? number_format($detail->potongan_absensi, 0, ',', '.') : '-' }}</td>
+                <td>Potongan Absensi (Ketidakhadiran)</td>
+                <td class="text-right">{{ number_format($detail->potongan_absensi, 0, ',', '.') }}</td>
             </tr>
+            @endif
+            @if($detail->potongan_keterlambatan > 0)
             <tr>
-                <td>Potongan BPJS Kesehatan (4%)</td>
-                <td class="text-right">{{ $detail->potongan_bpjs_kesehatan_4 > 0 ? number_format($detail->potongan_bpjs_kesehatan_4, 0, ',', '.') : '-' }}</td>
+                <td>Potongan Absensi (Keterlambatan)</td>
+                <td class="text-right">{{ number_format($detail->potongan_keterlambatan, 0, ',', '.') }}</td>
             </tr>
+            @endif
+            @if($detail->potongan_bpjs_kesehatan_4 > 0)
             <tr>
-                <td>Potongan BPJS Kesehatan (1%)</td>
-                <td class="text-right">{{ $detail->potongan_bpjs_kesehatan_1 > 0 ? number_format($detail->potongan_bpjs_kesehatan_1, 0, ',', '.') : '-' }}</td>
+                <td>Potongan BPJS Kesehatan (4%) - Tanggungan Perusahaan</td>
+                <td class="text-right">{{ number_format($detail->potongan_bpjs_kesehatan_4, 0, ',', '.') }}</td>
             </tr>
+            @endif
+            @if($detail->potongan_bpjs_kesehatan_1 > 0)
+            <tr>
+                <td>Potongan BPJS Kesehatan (1%) - Tanggungan Karyawan</td>
+                <td class="text-right">{{ number_format($detail->potongan_bpjs_kesehatan_1, 0, ',', '.') }}</td>
+            </tr>
+            @endif
             <tr class="total-row">
                 <td>TOTAL PENGELUARAN</td>
                 <td class="text-right">Rp {{ number_format($detail->total_pengeluaran, 0, ',', '.') }}</td>
@@ -289,9 +335,9 @@
         </tbody>
     </table>
 
-    <table class="detail-table" style="margin-top: 6px;">
+    <table class="detail-table" style="margin-top: 4px;">
         <tr class="grand-total">
-            <td>TOTAL DITERIMA KARYAWAN</td>
+            <td>TOTAL DITERIMA</td>
             <td class="text-right">Rp {{ number_format($detail->take_home_pay, 0, ',', '.') }}</td>
         </tr>
     </table>
@@ -304,9 +350,7 @@
 
     <div class="signature-section">
         <div class="city-date">Bandung, {{ $tanggalCetak }}</div>
-
-        <div style="margin-top: 35px;"></div>
-
+        <div style="margin-top: 20px;"></div>
         <div class="company-sign">PT. Johen Sukses Abadi</div>
     </div>
 </body>
