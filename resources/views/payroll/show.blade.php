@@ -3,7 +3,7 @@
     <div x-data="progressModal()" x-init="init()" class="contents">
         {{-- Progress Modal --}}
         <template x-teleport="body">
-            <div x-show="processing && !showDoneModal"
+            <div x-show="showProgressModal"
                  x-cloak
                  x-transition:enter="transition-opacity ease-linear duration-300"
                  x-transition:enter-start="opacity-0"
@@ -12,27 +12,42 @@
                  x-transition:leave-start="opacity-100"
                  x-transition:leave-end="opacity-0"
                  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
-                <div x-show="processing && !showDoneModal"
+                <div x-show="showProgressModal"
                      x-transition:enter="transition-all ease-out duration-300"
                      x-transition:enter-start="opacity-0 scale-95"
                      x-transition:enter-end="opacity-100 scale-100"
                      class="relative w-full max-w-lg rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl">
                     <div class="text-center">
-                        <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-100 to-violet-100 flex items-center justify-center mb-4">
-                            <svg class="w-8 h-8 text-primary-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Mengirim Slip Gaji</h3>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Mohon tunggu, jangan tutup halaman ini</p>
+                        <template x-if="!allDone">
+                            <div>
+                                <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-100 to-violet-100 flex items-center justify-center mb-4">
+                                    <svg class="w-8 h-8 text-primary-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Mengirim Slip Gaji</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Mohon tunggu, jangan tutup halaman ini</p>
+                            </div>
+                        </template>
+                        <template x-if="allDone">
+                            <div>
+                                <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center mb-4">
+                                    <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100" x-text="failed === 0 ? 'Semua Email Terkirim!' : 'Proses Selesai'"></h3>
+                            </div>
+                        </template>
 
                         <div class="mt-6 mb-2">
                             <span class="text-5xl font-extrabold text-primary-600" x-text="percent + '%'">0%</span>
                         </div>
 
                         <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                            <div class="bg-gradient-to-r from-primary-500 to-violet-500 h-3 rounded-full transition-all duration-700 ease-out shadow-sm shadow-primary-200"
+                            <div class="h-3 rounded-full transition-all duration-700 ease-out shadow-sm"
+                                 :class="allDone ? 'bg-emerald-500' : 'bg-gradient-to-r from-primary-500 to-violet-500 shadow-primary-200'"
                                  x-bind:style="'width: ' + percent + '%'"></div>
                         </div>
 
@@ -51,67 +66,14 @@
                             </span>
                         </div>
                         <p class="mt-4 text-xs text-gray-400 dark:text-gray-500" x-text="`(${sent + failed} dari ${total} karyawan)`">(0 dari 0 karyawan)</p>
-                    </div>
-                </div>
-            </div>
-        </template>
-
-        {{-- Done Modal --}}
-        <template x-teleport="body">
-            <div x-show="showDoneModal"
-                 x-cloak
-                 x-transition:enter="transition-opacity ease-linear duration-300"
-                 x-transition:enter-start="opacity-0"
-                 x-transition:enter-end="opacity-100"
-                 x-transition:leave="transition-opacity ease-linear duration-300"
-                 x-transition:leave-start="opacity-100"
-                 x-transition:leave-end="opacity-0"
-                 class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
-                <div x-show="showDoneModal"
-                     x-transition:enter="transition-all ease-out duration-300"
-                     x-transition:enter-start="opacity-0 scale-95 translate-y-4"
-                     x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-                     class="relative w-full max-w-md rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl">
-                    <div class="text-center">
-                        <template x-if="failed === 0">
-                            <div>
-                                <div class="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center mb-4">
-                                    <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                    </svg>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Semua Email Terkirim!</h3>
-                            </div>
-                        </template>
-                        <template x-if="failed > 0">
-                            <div>
-                                <div class="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center mb-4">
-                                    <svg class="w-10 h-10 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"/>
-                                    </svg>
-                                </div>
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100">Proses Selesai</h3>
-                            </div>
-                        </template>
-                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Periode {{ $import->periode }}</p>
-
-                        <div class="mt-6 bg-gray-50 dark:bg-gray-800 rounded-xl p-4 space-y-2 text-sm">
-                            <div class="flex items-center justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Total Karyawan</span>
-                                <span class="font-semibold text-gray-900 dark:text-gray-100" x-text="total"></span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-gray-600 dark:text-gray-400">Berhasil Terkirim</span>
-                                <span class="font-semibold text-emerald-600" x-text="sent"></span>
-                            </div>
-                            <div class="flex items-center justify-between" x-show="failed > 0">
-                                <span class="text-gray-600 dark:text-gray-400">Gagal</span>
-                                <span class="font-semibold text-red-600" x-text="failed"></span>
-                            </div>
-                        </div>
 
                         <div class="mt-6 flex justify-center gap-3">
-                            <button @click="window.location.reload()" class="btn-secondary">Tutup</button>
+                            <template x-if="!allDone">
+                                <button @click="showProgressModal = false" class="btn-secondary text-sm">Sembunyikan</button>
+                            </template>
+                            <template x-if="allDone">
+                                <button @click="window.location.reload()" class="btn-primary text-sm">Tutup</button>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -129,15 +91,12 @@
                 percent: {{ $progress['percent'] }},
                 allDone: {{ $progress['allDone'] ? 'true' : 'false' }},
                 processing: {{ session('processing') ? 'true' : 'false' }},
-                showDoneModal: false,
+                showProgressModal: false,
                 interval: null,
                 init() {
-                    if (this.allDone && this.processing) {
-                        this.showDoneModal = true;
-                        this.processing = false;
-                        return;
-                    }
                     if (!this.processing) return;
+                    this.showProgressModal = true;
+                    if (this.allDone) return;
                     this.interval = setInterval(() => { this.fetchProgress(); }, 3000);
                 },
                 fetchProgress() {
@@ -150,11 +109,11 @@
                             this.pending = d.pending;
                             this.percent = d.percent;
                             if (d.allDone) {
-                                this.processing = false;
-                                this.showDoneModal = true;
+                                this.allDone = true;
                                 clearInterval(this.interval);
                             }
-                        });
+                        })
+                        .catch(() => {});
                 }
             }
         }

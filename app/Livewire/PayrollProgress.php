@@ -18,26 +18,21 @@ class PayrollProgress extends Component
 
     public function render()
     {
-        $total = $this->import->total_employee;
+        $total = $this->import->payrollDetails()->count();
         $sent = $this->import->payrollDetails()->where('status', 'sent')->count();
         $failed = $this->import->payrollDetails()->where('status', 'failed')->count();
-        $pending = $total - $sent - $failed;
+        $pending = max(0, $total - $sent - $failed);
         $percent = $total > 0 ? (int) round(($sent + $failed) / $total * 100) : 0;
         $allDone = $total > 0 && ($sent + $failed) >= $total;
 
         $showProgress = false;
-        $showDone = false;
 
         if (!$this->doneDismissed) {
-            if ($allDone) {
-                $showDone = true;
-            } else {
-                $showProgress = true;
-            }
+            $showProgress = true;
         }
 
         return view('livewire.payroll-progress', compact(
-            'total', 'sent', 'failed', 'pending', 'percent', 'showProgress', 'showDone'
+            'total', 'sent', 'failed', 'pending', 'percent', 'allDone', 'showProgress'
         ) + ['lastPoll' => $this->lastPoll]);
     }
 

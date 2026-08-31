@@ -35,10 +35,10 @@ class PayrollController extends Controller
 
     private function getProgress(PayrollImport $import): array
     {
-        $total = $import->total_employee;
+        $total = $import->payrollDetails()->count();
         $sent = $import->payrollDetails()->where('status', 'sent')->count();
         $failed = $import->payrollDetails()->where('status', 'failed')->count();
-        $pending = $total - $sent - $failed;
+        $pending = max(0, $total - $sent - $failed);
         $percent = $total > 0 ? (int) round(($sent + $failed) / $total * 100) : 0;
 
         return [

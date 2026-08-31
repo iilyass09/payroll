@@ -8,8 +8,8 @@
 
     <p>Terlampir slip gaji periode <strong>{{ $periode }}</strong>.</p>
 
-    <p><strong>Password PDF:</strong> <code>{{ $pdfPassword }}</code></p>
-    <p>Gunakan password di atas untuk membuka file PDF terlampir.</p>
+    <p><strong>Password PDF:</strong> Password terdiri dari <strong>NIK karyawan</strong> + <strong>2 digit terakhir Nomor KTP</strong> Anda.</p>
+    <p>Gunakan password tersebut untuk membuka file PDF terlampir.</p>
 
     <p>Email ini dibuat otomatis, jika terdapat kekeliruan/kurang jelas dapat menginformasikan kepada kami management.</p>
 

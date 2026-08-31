@@ -3,22 +3,31 @@
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm">
             <div class="relative w-full max-w-lg rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-2xl">
                 <div class="text-center">
-                    <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-100 to-violet-100 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-primary-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Mengirim Slip Gaji</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Mohon tunggu, jangan tutup halaman ini</p>
+                    @if(!$allDone)
+                        <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-100 to-violet-100 flex items-center justify-center mb-4">
+                            <svg class="w-8 h-8 text-primary-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Mengirim Slip Gaji</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Mohon tunggu, jangan tutup halaman ini</p>
+                    @else
+                        <div class="mx-auto w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center mb-4">
+                            <svg class="w-10 h-10 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ $failed === 0 ? 'Semua Email Terkirim!' : 'Proses Selesai' }}</h3>
+                    @endif
 
                     <div class="mt-6 mb-2">
-                        <span class="text-5xl font-extrabold text-primary-600">{{ $percent }}%</span>
+                        <span class="text-5xl font-extrabold {{ $allDone ? 'text-emerald-600' : 'text-primary-600' }}">{{ $percent }}%</span>
                     </div>
                     <div class="text-[10px] text-gray-300 dark:text-gray-600">last poll: {{ $lastPoll }}</div>
 
                     <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                        <div class="bg-gradient-to-r from-primary-500 to-violet-500 h-3 rounded-full shadow-sm shadow-primary-200"
+                        <div class="h-3 rounded-full shadow-sm {{ $allDone ? 'bg-emerald-500' : 'bg-gradient-to-r from-primary-500 to-violet-500 shadow-primary-200' }}"
                              style="width: {{ $percent }}%"></div>
                     </div>
 
@@ -39,6 +48,15 @@
                         @endif
                     </div>
                     <p class="mt-4 text-xs text-gray-400 dark:text-gray-500">({{ $sent + $failed }} dari {{ $total }} karyawan)</p>
+
+                    <div class="mt-6 flex justify-center gap-3">
+                        @if(!$allDone)
+                            <button wire:click="close" class="btn-secondary text-sm">Sembunyikan</button>
+                        @else
+                            <a href="{{ route('payroll.email-logs', $import) }}" class="btn-primary text-sm">Lihat Detail</a>
+                            <button wire:click="close" class="btn-secondary text-sm">Tutup</button>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

@@ -15,8 +15,8 @@
         .header {
             text-align: center;
             border-bottom: 2px solid #333;
-            padding-bottom: 6px;
-            margin-bottom: 8px;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
         }
         .header .company-name {
             font-size: 12px;
@@ -35,9 +35,9 @@
             margin: 0 auto 4px auto;
         }
         .identity-section {
-            margin-bottom: 8px;
+            margin-bottom: 14px;
             border-bottom: 2px solid #333;
-            padding-bottom: 6px;
+            padding-bottom: 10px;
         }
         .identity-table {
             width: 100%;
@@ -77,9 +77,9 @@
         .section-title {
             font-weight: bold;
             font-size: 11px;
-            padding: 4px 8px;
-            margin-top: 6px;
-            margin-bottom: 1px;
+            padding: 5px 8px;
+            margin-top: 16px;
+            margin-bottom: 3px;
         }
         .section-title.penerimaan {
             background: #e8f5e9;
@@ -95,14 +95,14 @@
         }
         .detail-table th {
             background: #f5f5f5;
-            padding: 3px 8px;
+            padding: 4px 8px;
             text-align: left;
             font-size: 9px;
             text-transform: uppercase;
             border-bottom: 1px solid #ddd;
         }
         .detail-table td {
-            padding: 3px 8px;
+            padding: 5px 8px;
             border-bottom: 1px solid #f0f0f0;
             font-size: 10px;
         }
@@ -113,43 +113,41 @@
             padding-left: 18px;
             font-size: 9px;
             color: #555;
-            border-left: 2px dashed #aaa;
         }
         .sub-item td:last-child {
             font-size: 9px;
             color: #555;
-            border-left: 2px dashed #aaa;
         }
         .total-row td {
             font-weight: bold;
             font-size: 10px;
             border-top: 2px solid #333;
-            padding-top: 4px;
+            padding-top: 8px;
         }
         .grand-total td {
             font-weight: bold;
             font-size: 12px;
             border-top: 3px double #1a56db;
-            padding-top: 4px;
+            padding-top: 8px;
             color: #1a56db;
         }
         .terbilang {
             text-align: center;
             font-size: 9px;
             font-style: italic;
-            padding: 5px;
-            margin-top: 3px;
-            border: 1px dashed #999;
+            padding: 6px;
+            margin-top: 12px;
+            border: 1px solid #ccc;
             background: #fafafa;
         }
         .footer-line {
             border: none;
             border-top: 1px solid #ccc;
-            margin: 8px 0 5px 0;
+            margin: 14px 0 10px 0;
         }
         .signature-section {
             text-align: center;
-            margin-top: 4px;
+            margin-top: 8px;
         }
         .signature-section .city-date {
             font-size: 10px;
@@ -185,6 +183,7 @@
         </div>
         <div class="company-name">PT. JOHEN SUKSES ABADI</div>
         <h1>SLIP GAJI</h1>
+        <div style="text-align: right; font-size: 9px; font-style: italic; color: #666; margin-top: -2px;">Slip ini dicetak secara elektronik</div>
     </div>
 
     <div class="identity-section">
@@ -257,7 +256,7 @@
                 <td class="text-right">{{ number_format($detail->insentif_creative, 0, ',', '.') }}</td>
             </tr>
             @endif
-            @if($detail->bonus_absensi_full <= 0 && $detail->pengembalian <= 0 && $detail->tips_pelanggan <= 0 && $detail->insentif_creative <= 0)
+            @endif
             @if($detail->premi_bpjs_kesehatan_4 > 0)
             <tr>
                 <td>Premi BPJS Kesehatan (4%)</td>
@@ -335,7 +334,7 @@
         </tbody>
     </table>
 
-    <table class="detail-table" style="margin-top: 4px;">
+    <table class="detail-table" style="margin-top: 10px;">
         <tr class="grand-total">
             <td>TOTAL DITERIMA</td>
             <td class="text-right">Rp {{ number_format($detail->take_home_pay, 0, ',', '.') }}</td>
