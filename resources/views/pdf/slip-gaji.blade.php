@@ -228,68 +228,50 @@
                 <td>Gaji Pokok</td>
                 <td class="text-right">{{ number_format($detail->gaji_pokok, 0, ',', '.') }}</td>
             </tr>
-            @if($detail->tunjangan_jabatan > 0)
             <tr>
                 <td>Tunjangan Jabatan</td>
-                <td class="text-right">{{ number_format($detail->tunjangan_jabatan, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->tunjangan_jabatan > 0 ? number_format($detail->tunjangan_jabatan, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
-            @if($detail->total_tambahan_upah_sub > 0)
             <tr>
                 <td colspan="2" style="padding: 0;">
                     <table class="detail-table sub-item-box">
                         <tbody>
                         <tr>
                             <td><strong>Tambahan Upah</strong></td>
-                            <td class="text-right"><strong>{{ number_format($detail->total_tambahan_upah_sub, 0, ',', '.') }}</strong></td>
+                            <td class="text-right"><strong>{{ $detail->total_tambahan_upah_sub > 0 ? number_format($detail->total_tambahan_upah_sub, 0, ',', '.') : '-' }}</strong></td>
                         </tr>
-                        @if($detail->bonus_absensi_full > 0)
                         <tr class="sub-item">
                             <td>Bonus Absensi Full 1 Bulan</td>
-                            <td class="text-right">{{ number_format($detail->bonus_absensi_full, 0, ',', '.') }}</td>
+                            <td class="text-right">{{ $detail->bonus_absensi_full > 0 ? number_format($detail->bonus_absensi_full, 0, ',', '.') : '-' }}</td>
                         </tr>
-                        @endif
-                        @if($detail->pengembalian > 0)
                         <tr class="sub-item">
                             <td>Pengembalian</td>
-                            <td class="text-right">{{ number_format($detail->pengembalian, 0, ',', '.') }}</td>
+                            <td class="text-right">{{ $detail->pengembalian > 0 ? number_format($detail->pengembalian, 0, ',', '.') : '-' }}</td>
                         </tr>
-                        @endif
-                        @if($detail->tips_pelanggan > 0)
                         <tr class="sub-item">
                             <td>Tips Pelanggan</td>
-                            <td class="text-right">{{ number_format($detail->tips_pelanggan, 0, ',', '.') }}</td>
+                            <td class="text-right">{{ $detail->tips_pelanggan > 0 ? number_format($detail->tips_pelanggan, 0, ',', '.') : '-' }}</td>
                         </tr>
-                        @endif
-                        @if($detail->insentif_creative > 0)
                         <tr class="sub-item">
                             <td>Insentif View/Sold Creative; Content Creator, Video Editor & Resepsionist</td>
-                            <td class="text-right">{{ number_format($detail->insentif_creative, 0, ',', '.') }}</td>
+                            <td class="text-right">{{ $detail->insentif_creative > 0 ? number_format($detail->insentif_creative, 0, ',', '.') : '-' }}</td>
                         </tr>
-                        @endif
                         </tbody>
                     </table>
                 </td>
             </tr>
-            @endif
-            @if($detail->premi_bpjs_kesehatan_4 > 0)
             <tr>
                 <td>Premi BPJS Kesehatan (4%)</td>
-                <td class="text-right">{{ number_format($detail->premi_bpjs_kesehatan_4, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->premi_bpjs_kesehatan_4 > 0 ? number_format($detail->premi_bpjs_kesehatan_4, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
-            @if($detail->tambahan_upah_bonus > 0)
             <tr>
                 <td>Tambahan Upah (Bonus Sold, View, dll)</td>
-                <td class="text-right">{{ number_format($detail->tambahan_upah_bonus, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->tambahan_upah_bonus > 0 ? number_format($detail->tambahan_upah_bonus, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
-            @if($detail->thr > 0)
             <tr>
                 <td>THR</td>
-                <td class="text-right">{{ number_format($detail->thr, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->thr > 0 ? number_format($detail->thr, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
             <tr class="total-row">
                 <td>TOTAL PENGHASILAN BRUTO</td>
                 <td class="text-right">Rp {{ number_format($detail->total_penghasilan_bruto, 0, ',', '.') }}</td>
@@ -306,42 +288,30 @@
             </tr>
         </thead>
         <tbody>
-            @if($detail->thr_dibayarkan > 0)
             <tr>
                 <td>THR Dibayarkan</td>
-                <td class="text-right">{{ number_format($detail->thr_dibayarkan, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->thr_dibayarkan > 0 ? number_format($detail->thr_dibayarkan, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
-            @if($detail->potongan_pinjaman > 0)
             <tr>
                 <td>Potongan Pinjaman</td>
-                <td class="text-right">{{ number_format($detail->potongan_pinjaman, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->potongan_pinjaman > 0 ? number_format($detail->potongan_pinjaman, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
-            @if($detail->potongan_absensi > 0)
             <tr>
                 <td>Potongan Absensi (Ketidakhadiran)</td>
-                <td class="text-right">{{ number_format($detail->potongan_absensi, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->potongan_absensi > 0 ? number_format($detail->potongan_absensi, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
-            @if($detail->potongan_keterlambatan > 0)
             <tr>
                 <td>Potongan Absensi (Keterlambatan)</td>
-                <td class="text-right">{{ number_format($detail->potongan_keterlambatan, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->potongan_keterlambatan > 0 ? number_format($detail->potongan_keterlambatan, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
-            @if($detail->potongan_bpjs_kesehatan_4 > 0)
             <tr>
                 <td>Potongan BPJS Kesehatan (4%) - Tanggungan Perusahaan</td>
-                <td class="text-right">{{ number_format($detail->potongan_bpjs_kesehatan_4, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->potongan_bpjs_kesehatan_4 > 0 ? number_format($detail->potongan_bpjs_kesehatan_4, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
-            @if($detail->potongan_bpjs_kesehatan_1 > 0)
             <tr>
                 <td>Potongan BPJS Kesehatan (1%) - Tanggungan Karyawan</td>
-                <td class="text-right">{{ number_format($detail->potongan_bpjs_kesehatan_1, 0, ',', '.') }}</td>
+                <td class="text-right">{{ $detail->potongan_bpjs_kesehatan_1 > 0 ? number_format($detail->potongan_bpjs_kesehatan_1, 0, ',', '.') : '-' }}</td>
             </tr>
-            @endif
             <tr class="total-row">
                 <td>TOTAL PENGELUARAN</td>
                 <td class="text-right">Rp {{ number_format($detail->total_pengeluaran, 0, ',', '.') }}</td>
