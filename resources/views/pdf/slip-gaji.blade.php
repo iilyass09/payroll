@@ -118,6 +118,9 @@
             font-size: 9px;
             color: #555;
         }
+        .sub-item-box {
+            margin: 2px 0;
+        }
         .total-row td {
             font-weight: bold;
             font-size: 10px;
@@ -183,7 +186,11 @@
         </div>
         <div class="company-name">PT. JOHEN SUKSES ABADI</div>
         <h1>SLIP GAJI</h1>
-        <div style="text-align: right; font-size: 9px; font-style: italic; color: #666; margin-top: -2px;">Slip ini dicetak secara elektronik</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 9px; margin-top: -2px;">
+            <span></span>
+            <span style="font-style: italic; color: #666; text-align: center;">Slip ini dicetak secara elektronik</span>
+            <span></span>
+        </div>
     </div>
 
     <div class="identity-section">
@@ -229,33 +236,41 @@
             @endif
             @if($detail->total_tambahan_upah_sub > 0)
             <tr>
-                <td><strong>Tambahan Upah</strong></td>
-                <td class="text-right"><strong>{{ number_format($detail->total_tambahan_upah_sub, 0, ',', '.') }}</strong></td>
+                <td colspan="2" style="padding: 0;">
+                    <table class="detail-table sub-item-box">
+                        <tbody>
+                        <tr>
+                            <td><strong>Tambahan Upah</strong></td>
+                            <td class="text-right"><strong>{{ number_format($detail->total_tambahan_upah_sub, 0, ',', '.') }}</strong></td>
+                        </tr>
+                        @if($detail->bonus_absensi_full > 0)
+                        <tr class="sub-item">
+                            <td>Bonus Absensi Full 1 Bulan</td>
+                            <td class="text-right">{{ number_format($detail->bonus_absensi_full, 0, ',', '.') }}</td>
+                        </tr>
+                        @endif
+                        @if($detail->pengembalian > 0)
+                        <tr class="sub-item">
+                            <td>Pengembalian</td>
+                            <td class="text-right">{{ number_format($detail->pengembalian, 0, ',', '.') }}</td>
+                        </tr>
+                        @endif
+                        @if($detail->tips_pelanggan > 0)
+                        <tr class="sub-item">
+                            <td>Tips Pelanggan</td>
+                            <td class="text-right">{{ number_format($detail->tips_pelanggan, 0, ',', '.') }}</td>
+                        </tr>
+                        @endif
+                        @if($detail->insentif_creative > 0)
+                        <tr class="sub-item">
+                            <td>Insentif View/Sold Creative; Content Creator, Video Editor & Resepsionist</td>
+                            <td class="text-right">{{ number_format($detail->insentif_creative, 0, ',', '.') }}</td>
+                        </tr>
+                        @endif
+                        </tbody>
+                    </table>
+                </td>
             </tr>
-            @if($detail->bonus_absensi_full > 0)
-            <tr class="sub-item">
-                <td>Bonus Absensi Full 1 Bulan</td>
-                <td class="text-right">{{ number_format($detail->bonus_absensi_full, 0, ',', '.') }}</td>
-            </tr>
-            @endif
-            @if($detail->pengembalian > 0)
-            <tr class="sub-item">
-                <td>Pengembalian</td>
-                <td class="text-right">{{ number_format($detail->pengembalian, 0, ',', '.') }}</td>
-            </tr>
-            @endif
-            @if($detail->tips_pelanggan > 0)
-            <tr class="sub-item">
-                <td>Tips Pelanggan</td>
-                <td class="text-right">{{ number_format($detail->tips_pelanggan, 0, ',', '.') }}</td>
-            </tr>
-            @endif
-            @if($detail->insentif_creative > 0)
-            <tr class="sub-item">
-                <td>Insentif View/Sold Creative; CC, Video Editor & Resepsionist</td>
-                <td class="text-right">{{ number_format($detail->insentif_creative, 0, ',', '.') }}</td>
-            </tr>
-            @endif
             @endif
             @if($detail->premi_bpjs_kesehatan_4 > 0)
             <tr>
